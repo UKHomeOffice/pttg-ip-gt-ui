@@ -22,7 +22,12 @@ import uk.gov.digital.ho.proving.income.domain.api.IncomeDetail;
 
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -78,11 +83,25 @@ public class ServiceTest {
         withResponse(url, Response.Status.OK);
         withApiResult();
 
-        final MvcResult mvcResult = this.mockMvc.perform(MockMvcRequestBuilders.get(url)
+        this.mockMvc.perform(MockMvcRequestBuilders.get(url)
                 .accept(MediaType.parseMediaType("application/json")))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.individual.forename").value(FORENAME)).andReturn();
+                .andExpect(jsonPath("$.individual.forename").value(FORENAME))
+                .andExpect(jsonPath("$.incomes", hasSize(2))).andReturn();
+    }
+
+    @Test
+    public void checkIncomeNinoExistsNoIncomes() throws Exception {
+        final URI url = withUri(NINO, FROM_DATE, TO_DATE);
+        withResponse(url, Response.Status.OK);
+        withApiResultNoIncomes();
+        this.mockMvc.perform(MockMvcRequestBuilders.get(url)
+                .accept(MediaType.parseMediaType("application/json")))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.individual.forename").value(FORENAME))
+                .andExpect(jsonPath("$.incomes", hasSize(0))).andReturn();
     }
 
 
@@ -119,6 +138,14 @@ public class ServiceTest {
         APIResponse apiResponse = new APIResponse();
         apiResponse.setIndividual(new Individual());
         Mockito.when(clientResponse.getEntity(APIResponse.class)).thenReturn(buildResponse());
+    }
+
+    private void withApiResultNoIncomes() {
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setIndividual(new Individual());
+        final APIResponse response = buildResponse();
+        response.setIncomes(new IncomeDetail[0]);
+        Mockito.when(clientResponse.getEntity(APIResponse.class)).thenReturn(response);
     }
 
     private void withResponse(URI url, Response.Status status) {
