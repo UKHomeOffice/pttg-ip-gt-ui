@@ -11,10 +11,10 @@
         $locationProvider.html5Mode(false);
         $routeProvider
             .when('/', {
-                redirectTo: '/income-proving-tool'
+                redirectTo: '/income-proving-query'
             })
-            .when('/income-proving-tool', {
-                templateUrl : 'views/income-proving-tool.html'
+            .when('/income-proving-query', {
+                templateUrl : 'views/income-proving-query.html'
             })
             .when('/income-proving-result', {
                 templateUrl : 'views/income-proving-result.html'

@@ -1,55 +1,47 @@
-<div class="error-summary" ng-if="vm.serverError !== ''">
-    <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
-        Connection Problem
-    </h1>
-    <p id="serverError"> {{vm.serverError}}</p>
-</div>
-
 <div class="column-full-width">
-    <div id="page1">
-        <h1 class="heading-xlarge">
-            <span class="heading-secondary">Financial requirement check</span>
-            Family Migration yes
-        </h1>
-        <h1 class="form-title heading-large" id="pageSubTitle">
-            Individual's details
-        </h1>
+    <div id="page1" data-bind="visible: currentPage() === 1">
+        <h1 class="heading-xlarge">What are the individual's details?</h1>
 
-        <div class="text">
-            <p class="lede" id="pageSubText">
-                You can check an individual meets the Category A Salaried requirement using a National Insurance Number.
-            </p>
-        </div>
-        <form name="vm.queryForm" ng-submit="vm.submit()">
-            <div ng-if="vm.validateError || vm.restError" class="error-summary"
-                 role="group" aria-labelledby="error-summary-heading-example-2" tabindex="-1">
+        <div class="form-group">
+            <form name="vm.queryForm" ng-submit="vm.submit()">
 
-                <h1 class="heading-medium error-summary-heading" id="error-summary-heading-example-2">
-                    There's some missing information
-                </h1>
+                <div ng-if="vm.validateError || vm.restError" class="error-summary"
+                     role="group" aria-labelledby="error-summary-heading-example-2" tabindex="-1">
 
-                <p>Make sure all the fields have been completed including the National Insurance Number and the
-                    application raised date.</p>
+                    <h1 class="heading-medium error-summary-heading" id="error-summary-heading-example-2">
+                        There's some missing information
+                    </h1>
 
-                <ul class="error-summary-list">
+                    <p>Make sure all the fields have been completed including the National Insurance Number and the
+                        application raised date.</p>
 
-                    <li ng-if="vm.ninoNotFoundError">
-                        <a href="" ng-click="vm.scrollTo('nino')">National Insurance Number was not found</a></li>
-                    <li ng-if="vm.ninoInvalidError">
-                        <a href="" ng-click="vm.scrollTo('nino')">National Insurance Number is invalid</a></li>
-                    <li ng-if="vm.ninoMissingError">
-                        <a href="" ng-click="vm.scrollTo('nino')">National Insurance Number is missing</a></li>
-                    <li ng-if="vm.dateMissingError">
-                        <a href="" ng-click="vm.scrollTo('applicationRaisedDateDay')">Application raised date is missing</a></li>
-                    <li ng-if="vm.dateInvalidError">
-                        <a href="" ng-click="vm.scrollTo('applicationRaisedDateDay')">Application raised date is invalid</a></li>
+                    <ul class="error-summary-list">
 
-                    <li ng-if="vm.dependantsInvalidError">
-                        <a href="" ng-click="vm.scrollTo('applicationRaisedDateDay')">The number of dependants is invalid</a></li>
-                </ul>
-            </div>
+                        <li ng-if="vm.ninoNotFoundError">
+                            <a href="" ng-click="vm.scrollTo('nino')">National Insurance Number was not found</a></li>
+                        <li ng-if="vm.ninoInvalidError">
+                            <a href="" ng-click="vm.scrollTo('nino')">National Insurance Number is invalid</a></li>
+                        <li ng-if="vm.ninoMissingError">
+                            <a href="" ng-click="vm.scrollTo('nino')">National Insurance Number is missing</a></li>
+                        <li ng-if="vm.fromDateMissingError">
+                            <a href="" ng-click="vm.scrollTo('fromDateDay')">Application from date is
+                                missing</a></li>
+                        <li ng-if="vm.fromDateInvalidError">
+                            <a href="" ng-click="vm.scrollTo('fromDateDay')">Application from date is
+                                invalid</a></li>
+                        <li ng-if="vm.toDateMissingError">
+                            <a href="" ng-click="vm.scrollTo('toDateDay')">Application to date is
+                                missing</a></li>
+                        <li ng-if="vm.toDateateInvalidError">
+                            <a href="" ng-click="vm.scrollTo('toDateDay')">Application to date is
+                                invalid</a></li>
 
-            <div>
+                        <li ng-if="vm.dependantsInvalidError">
+                            <a href="" ng-click="vm.scrollTo('applicationRaisedDateDay')">The number of dependants is
+                                invalid</a></li>
+                    </ul>
+                </div>
+
                 <div class="form-group"
                      ng-class="{error : vm.restError || vm.ninoInvalidError || vm.ninoMissingError }">
                     <label for="nino" class="form-label-bold">
@@ -67,51 +59,78 @@
                            autocomplete="off">
                 </div>
 
-                <div class="form-group" ng-class="{error : vm.dependantsInvalidError }">
-                    <label class="form-label-bold" for="dependants" id="no-dependants">
-                        Number of Dependants
-                        <span class="form-hint">You can leave this blank for no dependants.</span>
-                    </label>
-                    <span id="dependants-error" class="error-message" ng-if="vm.dependantsInvalidError">
-                                    The number or dependants is invalid</span>
-                    <input type="number" class="form-control form-control-1-8" name="dependants" id="dependants"
-                           ng-model="vm.model.dependants" autocomplete="off">
-                </div>
 
-                <div class="form-group " id="to-date" ng-class="{error : vm.dateMissingError || vm.dateInvalidError}">
+                <div class="form-group " id="from-date"
+                     ng-class="{error : vm.fromDateMissingError || vm.fromDateInvalidError}">
 
                     <fieldset>
-                        <legend class="form-label-bold">When was the application raised?</legend>
+                        <legend class="form-label-bold">Income From Date</legend>
                         <div class="form-date">
                             <p class="form-hint">For example, 31 3 1980</p>
-                                <span id="application—raised-date-error" class="error-message" ng-if="vm.dateMissingError || vm.dateInvalidError">
-                                    Please provide a valid Application Raised Date</span>
+                                <span id="application—raised-date-error" class="error-message"
+                                      ng-if="vm.fromDateMissingError || vm.fromDateInvalidError">
+                                    Please provide a valid from Date</span>
                             <div class="form-group form-group-day">
-                                <label for="applicationRaisedDateDay">Day</label>
-                                <input class="form-control" name="applicationRaisedDateDay" id="applicationRaisedDateDay" type="number"
+                                <label for="fromDateDay">Day</label>
+                                <input class="form-control" name="fromDateDay" id="fromDateDay" type="number"
                                        pattern="[0-9]*" ng-model="vm.model.fromDateDay" autocomplete="off">
                             </div>
 
                             <div class="form-group form-group-month">
-                                <label for="applicationRaisedDateMonth">Month</label>
-                                <input class="form-control" name="applicationRaisedDateMonth" id="applicationRaisedDateMonth"
+                                <label for="fromDateMonth">Month</label>
+                                <input class="form-control" name="fromDateMonth" id="fromDateMonth"
                                        type="number" pattern="[0-9]*" ng-model="vm.model.fromDateMonth"
                                        autocomplete="off">
                             </div>
 
                             <div class="form-group form-group-year">
-                                <label for="applicationRaisedDateYear">Year</label>
-                                <input class="form-control" name="applicationRaisedDateYear" id="applicationRaisedDateYear" type="number"
+                                <label for="fromDateYear">Year</label>
+                                <input class="form-control" name="fromDateYear" id="fromDateYear" type="number"
                                        pattern="[0-9]*" ng-model="vm.model.fromDateYear" autocomplete="off">
                             </div>
                         </div>
 
                     </fieldset>
                 </div>
+                <div class="form-group " id="to-date"
+                     ng-class="{error : vm.toDateMissingError || vm.toDateInvalidError}">
+
+                    <fieldset>
+                        <legend class="form-label-bold">Income To Date</legend>
+                        <div class="form-date">
+                            <p class="form-hint">For example, 31 3 1980</p>
+                                <span id="application—raised-date-error" class="error-message"
+                                      ng-if="vm.toDateMissingError || vm.toDateInvalidError">
+                                    Please provide a valid to Date</span>
+                            <div class="form-group form-group-day">
+                                <label for="toDateDay">Day</label>
+                                <input class="form-control" name="toDateDay" id="toDateDay" type="number"
+                                       pattern="[0-9]*" ng-model="vm.model.toDateDay" autocomplete="off">
+                            </div>
+
+                            <div class="form-group form-group-month">
+                                <label for="toDateMonth">Month</label>
+                                <input class="form-control" name="toDateMonth" id="toDateMonth"
+                                       type="number" pattern="[0-9]*" ng-model="vm.model.toDateMonth"
+                                       autocomplete="off">
+                            </div>
+
+                            <div class="form-group form-group-year">
+                                <label for="toDateYear">Year</label>
+                                <input class="form-control" name="toDateYear" id="toDateYear" type="number"
+                                       pattern="[0-9]*" ng-model="vm.model.toDateYear" autocomplete="off">
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+
                 <div class="form-group">
                     <p><input type="submit" class="button continue-button" value="Check eligibility"></p>
                 </div>
-            </div>
-        </form>
+
+            </form>
+        </div>
     </div>
+
 </div>

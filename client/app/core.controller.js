@@ -105,7 +105,7 @@
         };
 
         vm.newSearch = function() {
-            $location.path('/income-proving-tool');
+            $location.path('/income-proving-query');
         };
 
         function clearErrors() {
