@@ -18,7 +18,7 @@ class ProvingThingsTestSteps {
     @Managed
     public WebDriver driver;
 
-    private int delay = 1000
+    private int delay = 500
 
     def String toCamelCase(String s) {
         String allUpper = StringUtils.remove(WordUtils.capitalizeFully(s), " ")
@@ -48,7 +48,6 @@ class ProvingThingsTestSteps {
 
         driver.get("http://localhost:8000");
     }
-
 
 // SD65 This method is empty because the validation (in the Then function) is done on the input page opened in the Given function
     @When("^Robert is displayed the Income Proving Service Case Worker Tool input page:\$")
@@ -197,32 +196,25 @@ class ProvingThingsTestSteps {
 
     @Then("^The service provides the following result:\$")
     public void the_service_provides_the_following_results(DataTable expectedResult) {
+        String amount
+        for (int i = 1; i < expectedResult.raw().size()+1; i++) {
+            String row = expectedResult.raw.get(i-1)
 
-        for (int i = 0; i < expectedResult.raw().size() - 1; i++) {
-            String row = expectedResult.raw.get(i)
             String[] column_data = row.split(",")
 
             driver.sleep(delay)
 
-            def dateXpath = '//*[@id="page2"]/table[2]/tbody[1]/tr[' + (i + 1) + ']/td[1]'
-
+            def dateXpath = '//*[@id="page2"]/table[2]/tbody['+i+']/tr/td[1]'
             assert column_data[0].contains(driver.findElement(By.xpath(dateXpath)).getText())
             println "dateXpath: " + driver.findElement(By.xpath(dateXpath)).getText()
 
-            def amountXpath = '//*[@id="page2"]/table[2]/tbody[1]/tr[' + (i + 1) + ']/td[3]'
+            def amountXpath = '//*[@id="page2"]/table[2]/tbody['+i+']/tr/td[3]'
 
-            assert column_data[2].contains(driver.findElement(By.xpath(amountXpath)).getText())
+            amount = column_data[2] + "," + column_data[3]
+            println "Amount --------->" + amount
+            assert amount.contains(driver.findElement(By.xpath(amountXpath)).getText())
             println "amountXpath :" + driver.findElement(By.xpath(amountXpath)).getText()
         }
-
-        // Result row
-        String result_row = expectedResult.raw.get(expectedResult.raw().size() - 1)
-        String[] result_columns = result_row.split(",")
-
-        assert result_columns[0].contains(driver.findElement(By.xpath('//*[@id="page2"]/table/tbody[2]/tr/td[1]/span')).getText())
-        println "result column: " + result_columns[0]
-        assert result_columns[2].contains(driver.findElement(By.xpath('//*[@id="page2"]/table/tbody[2]/tr/td[3]/span')).getText())
-        println "result column_2: " + result_columns[2]
     }
 
     @Then("^The service displays the following message:\$")
@@ -255,23 +247,23 @@ class ProvingThingsTestSteps {
 
         for (String s : tableKey) {
 
-                if (s == "Your Search Individual Name") {
-                    assert entries.get(s).contains(yourSearchIndividualName.getText())
-                    println "Your Search Individual Name: " + yourSearchIndividualName.getText()
-                }
+            if (s == "Your Search Individual Name") {
+                assert entries.get(s).contains(yourSearchIndividualName.getText())
+                println "Your Search Individual Name: " + yourSearchIndividualName.getText()
+            }
 
-                if(s == "Your Search National Insurance Number"){
-                    assert entries.get(s).contains(yourSearchNationalInsuranceNumber.getText())
-                    println "Your Search National Insurance Number:  " + yourSearchNationalInsuranceNumber.getText()
-                }
+            if (s == "Your Search National Insurance Number") {
+                assert entries.get(s).contains(yourSearchNationalInsuranceNumber.getText())
+                println "Your Search National Insurance Number:  " + yourSearchNationalInsuranceNumber.getText()
+            }
 
-               if(s == "Your Search From Date"){
-                   assert entries.get(s).contains(yourSearchFromDate.getText())
-                   println "Your Search From Date: " + yourSearchFromDate.getText()
+            if (s == "Your Search From Date") {
+                assert entries.get(s).contains(yourSearchFromDate.getText())
+                println "Your Search From Date: " + yourSearchFromDate.getText()
 
-                }
+            }
 
-            if(s == "Your Search To Date"){
+            if (s == "Your Search To Date") {
                 assert entries.get(s).contains(yourSearchToDate.getText())
                 println "Your Search To Date: " + yourSearchToDate.getText()
 
@@ -415,8 +407,6 @@ class ProvingThingsTestSteps {
 
         }
     }
-
-
 
 //SD41
     @Then("^The service for Cat A Failure provides the following result:\$")
