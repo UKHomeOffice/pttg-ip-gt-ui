@@ -71,10 +71,15 @@ class ProvingThingsTestSteps {
 
             if (key.endsWith("Date")) {
                 if (v != null && v.length() != 0) {
-                    Date parsedDate = parseDate(v)
-                    sendKeys(driver.findElement(By.id(key + "Day")), String.valueOf(parsedDate.getAt(Calendar.DAY_OF_MONTH)))
-                    sendKeys(driver.findElement(By.id(key + "Month")), String.valueOf(parsedDate.getAt(Calendar.MONTH) + 1))
-                    sendKeys(driver.findElement(By.id(key + "Year")), String.valueOf(parsedDate.getAt(Calendar.YEAR)))
+
+                    String day = v.substring(0, v.indexOf("/"))
+                    String month = v.substring(v.indexOf("/")+1, v.lastIndexOf("/"))
+                    String year = v.substring(v.lastIndexOf("/")+1)
+
+                    sendKeys(driver.findElement(By.id(key + "Day")), day)
+                    sendKeys(driver.findElement(By.id(key + "Month")), month)
+                    sendKeys(driver.findElement(By.id(key + "Year")), year)
+
                 } else {
                     driver.findElement(By.id(key + "Day")).clear()
                     driver.findElement(By.id(key + "Month")).clear()

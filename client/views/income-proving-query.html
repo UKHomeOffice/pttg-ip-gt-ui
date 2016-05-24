@@ -1,6 +1,11 @@
 <div class="column-full-width">
     <div id="page1" data-bind="visible: currentPage() === 1">
-        <h1 class="heading-xlarge">What are the individual's details?</h1>
+        <h1 class="heading-xlarge" id=""pageSubTitle">Individual details</h1>
+        <div class="text">
+            <p class="lede" id="pageSubText">
+                Use this tool to query HMRC. It will provide the income of a person using their National Insurance Number.
+            </p>
+        </div>
 
         <div class="form-group">
             <form name="vm.queryForm" ng-submit="vm.submit()">

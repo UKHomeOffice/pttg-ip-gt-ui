@@ -9,7 +9,6 @@ Feature: Tool identifies Applicant meets Category A Financial Requirement
   Scenario: Input Page checks for Category A financial text write up (1)
 
   Given Robert is using the IPS Generic Tool
-  When Robert submits a query:
   Then The service displays the following message:
       | Page sub title | Individual's details                                                                                                                                                           |
       | Page sub text  | Use this tool to query HMRC. It will provide the income of a person using their National Insurance Number. |
@@ -81,7 +80,7 @@ Feature: Tool identifies Applicant meets Category A Financial Requirement
       | From Date | 34/01/2015 |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | Error Message | Please provide a valid Application Raised Date |
+      | Error Message | Please provide a valid from Date |
       | Error Field   | application—raised-date-error                  |
 
 #New scenaio - Added in SD158
@@ -92,7 +91,7 @@ Feature: Tool identifies Applicant meets Category A Financial Requirement
       | From Date | 34/01/2015 |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | Error Message | Please provide a valid Application Raised Date |
+      | Error Message | Please provide a valid from Date |
       | Error Field   | application—raised-date-error                  |
 
 #New scenaio - Added in SD158
@@ -103,7 +102,7 @@ Feature: Tool identifies Applicant meets Category A Financial Requirement
       | From Date | 01/13/2015 |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | Error Message | Please provide a valid Application Raised Date |
+      | Error Message | Please provide a valid from Date |
       | Error Field   | application—raised-date-error                  |
 
 #New scenaio - Added in SD158
@@ -114,7 +113,7 @@ Feature: Tool identifies Applicant meets Category A Financial Requirement
       | From Date | 01/13/2015 |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | Error Message | Please provide a valid Application Raised Date |
+      | Error Message | Please provide a valid from Date |
       | Error Field   | application—raised-date-error                  |
 
 #New scenaio - Added in SD158
@@ -125,7 +124,7 @@ Feature: Tool identifies Applicant meets Category A Financial Requirement
       | From Date | 34/01/201D |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | Error Message | Please provide a valid Application Raised Date |
+      | Error Message | Please provide a valid from Date |
       | Error Field   | application—raised-date-error                  |
 
 #New scenaio - Added in SD158
@@ -136,7 +135,7 @@ Feature: Tool identifies Applicant meets Category A Financial Requirement
       | From Date | 01/01/2015 |
       | To Date   | 01/07/201E |
     Then The service displays the following message:
-      | Error Message | Please provide a valid Application Raised Date |
+      | Error Message | Please provide a valid to Date |
       | Error Field   | application—raised-date-error                  |
 
 #New scenaio - Added in SD158
@@ -147,7 +146,7 @@ Feature: Tool identifies Applicant meets Category A Financial Requirement
       | From Date |            |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | Error Message | Please provide a Application Raised Date |
+      | Error Message | Please provide a valid from Date |
       | Error Field   | application—raised-date-error             |
 
 #New scenaio - Added in SD158
@@ -158,5 +157,5 @@ Feature: Tool identifies Applicant meets Category A Financial Requirement
       | From Date | 01/01/2015 |
       | To Date   |            |
     Then The service displays the following message:
-      | Error Message | Please provide a Application Raised Date |
+      | Error Message | Please provide a valid to Date |
       | Error Field   | application—raised-date-error             |
