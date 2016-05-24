@@ -40,6 +40,7 @@ public class ServiceTest {
     public static final String NINO = "AA";
     public static final String FROM_DATE = "2016-12-12";
     public static final String TO_DATE = "2016-12-12";
+    public static final String BAD_DATE = "7567/4545";
 
     private MockMvc mockMvc;
 
@@ -81,7 +82,7 @@ public class ServiceTest {
 
     @Test
     public void checkIncomeBadDate() throws Exception {
-        URI url = withUri(NINO, "7567/4545", TO_DATE);
+        URI url = withUri(NINO, BAD_DATE, TO_DATE);
 
         withResponse(url, Response.Status.BAD_REQUEST);
         withApiResult();
@@ -94,7 +95,7 @@ public class ServiceTest {
 
     @Test
     public void checkIncomeMissingNinoNotFound() throws Exception {
-        URI url = withUri("", "7567/4545", TO_DATE);
+        URI url = withUri("", FROM_DATE, TO_DATE);
         //does not match URL without nino (local API not matched)
         withResponse(url, Response.Status.NOT_FOUND);
 
