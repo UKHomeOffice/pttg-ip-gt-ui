@@ -57,11 +57,15 @@
         };
 
         vm.formatToDate = function() {
-            return moment(vm.getFullToDate(), DATE_VALIDATE_FORMAT, true).format("DD/MM/YYYY");
+                  return vm.formatDate(vm.getFullToDate());
         }
 
         vm.formatFromDate = function() {
-                    return moment(vm.getFullFromDate(), DATE_VALIDATE_FORMAT, true).format("DD/MM/YYYY");
+                  return vm.formatDate(vm.getFullFromDate());
+        }
+
+        vm.formatDate = function(dateToFormat) {
+                  return moment(dateToFormat, DATE_VALIDATE_FORMAT, true).format("DD/MM/YYYY");
         }
 
         vm.scrollTo = function(anchor){
@@ -78,7 +82,7 @@
                         console.log(data.individual);
                         vm.model.applicant = data.individual;
                         vm.model.incomes = data.incomes;
-                        vm.model.total;
+                        vm.model.total = data.total;
                         $location.path('/income-proving-result');
                     }).catch(function(error) {
                         if (error.status === 400 && error.data.error.code === INVALID_NINO_NUMBER){

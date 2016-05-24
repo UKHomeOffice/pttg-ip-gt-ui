@@ -1,8 +1,3 @@
-<div class="breadcrumbs">
-    <ol role="breadcrumbs">
-        <li><a href="/#/income-proving-query">Individual's details</a></li>
-    </ol>
-</div>
 
 
 <div id="page2" >
@@ -41,7 +36,7 @@
         <tr>
             {{console.log(income.paydate);}}
             {{console.log(income.employer);}}
-            <td scope="col">{{income.payDate}}</td>
+            <td scope="col">{{vm.formatDate(income.payDate)}}</td>
             <td scope="col">{{income.employer}}</td>
             <td scope="col">{{income.income}}</td>
         </tr>
@@ -54,8 +49,8 @@
     </table>
     <br/>
     <br/>
-    <form data-bind="submit: reset">
-        <input type="submit" class="button" value="Search again">
-    </form>
+    <div class="form-group">
+        <input type="submit" class="button" value="Start a new search" ng-click="vm.newSearch()">
+    </div>
 
 </div>
