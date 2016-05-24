@@ -15,6 +15,7 @@ buildscript {
         //classpath 'com.wiredforcode:gradle-spawn-plugin:0.6.0'
         classpath 'net.serenity-bdd:serenity-gradle-plugin:1.1.31'
         classpath 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.4'
+
     }
 }
 
@@ -64,6 +65,7 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.5'
     compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.4'
     compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.22.2'
+    compile 'org.apache.commons:commons-lang3:3.4'
 
     // ++ Serenity BDD
     testCompile 'net.serenity-bdd:serenity-cucumber:1.1.6'
