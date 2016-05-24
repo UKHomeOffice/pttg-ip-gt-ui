@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<!--[if lt IE 9]>
+<html class="lte-ie8" lang="en"><![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en"><!--<![endif]-->
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+    <title>GOV.UK - The best place to find government services and information</title>
+
+    <script type="text/javascript">
+      (function(){if(navigator.userAgent.match(/IEMobile\/10\.0/)){var d=document,c="appendChild",a=d.createElement("style");a[c](d.createTextNode("@-ms-viewport{width:auto!important}"));d.getElementsByTagName("head")[0][c](a);}})();
+
+
+
+
+
+
+    </script>
+
+    <!--[if gt IE 8]><!-->
+    <link href="/assets/stylesheets/govuk-template.css" media="screen" rel="stylesheet" type="text/css"/>
+    <!--<![endif]-->
+    <!--[if IE 6]>
+    <link href="/assets/stylesheets/govuk-template-ie6.css" media="screen" rel="stylesheet" type="text/css"/>
+    <![endif]-->
+    <!--[if IE 7]>
+    <link href="/assets/stylesheets/govuk-template-ie7.css" media="screen" rel="stylesheet" type="text/css"/>
+    <![endif]-->
+    <!--[if IE 8]>
+    <link href="/assets/stylesheets/govuk-template-ie8.css" media="screen" rel="stylesheet" type="text/css"/>
+    <![endif]-->
+
+    <link href="/assets/stylesheets/govuk-template-print.css" media="print" rel="stylesheet" type="text/css"/>
+
+    <!--[if IE 8]>
+    <script type="text/javascript">
+      (function(){if(window.opera){return;}
+       setTimeout(function(){var a=document,g,b={families:(g=
+       ["nta"]),urls:["/assets/stylesheets/fonts-ie8.css"]},
+       c="/assets/javascripts/vendor/goog/webfont-debug.js",d="script",
+       e=a.createElement(d),f=a.getElementsByTagName(d)[0],h=g.length;WebFontConfig
+       ={custom:b},e.src=c,f.parentNode.insertBefore(e,f);for(;h=h-1;a.documentElement
+       .className+=' wf-'+g[h].replace(/\s/g,'').toLowerCase()+'-n4-loading');},0)
+      })()
+
+
+
+
+
+
+    </script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+    <link href="/assets/stylesheets/fonts.css" media="all" rel="stylesheet" type="text/css"/>
+    <!--<![endif]-->
+
+
+    <!--[if lt IE 9]>
+    <script src="/assets/javascripts/ie.js" type="text/javascript"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
+
+    <!-- Size for iPad and iPad mini (high resolution) -->
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/images/apple-touch-icon-152x152.png">
+    <!-- Size for iPhone and iPod touch (high resolution) -->
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/assets/images/apple-touch-icon-120x120.png">
+    <!-- Size for iPad 2 and iPad mini (standard resolution) -->
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/assets/images/apple-touch-icon-76x76.png">
+    <!-- Default non-defined size, also used for Android 2.1+ devices -->
+    <link rel="apple-touch-icon-precomposed" href="/assets/images/apple-touch-icon-60x60.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:image" content="/assets/images/opengraph-image.png">
+
+    <link rel="stylesheet" type="text/css" href="css/govuk/styles.css">
+    <script type="text/javascript" data-main="js/init.js" src="js/requirejs/require.js"></script>
+
+</head>
+
+<body>
+<script type="text/javascript">
+    document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+</script>
+
+<div id="skiplink-container">
+    <div>
+        <a href="#content" class="skiplink">Skip to main content</a>
+    </div>
+</div>
+
+<div id="global-cookie-message">
+
+    <p>GOV.UK uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies">Find out more about
+        cookies</a></p>
+
+</div>
+<!--end global-cookie-message-->
+
+
+<header role="banner" id="global-header" class="">
+    <div class="header-wrapper">
+        <div class="header-global">
+            <div class="header-logo">
+                <a href="https://www.gov.uk/" title="Go to the GOV.UK homepage" id="logo" class="content">
+                    <img src="/assets/images/gov.uk_logotype_crown_invert_trans.png" width="35" height="31" alt="">
+                    <span>Home Office</span>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</header>
+<!--end header-->
+
+
+<div id="global-header-bar"></div>
+<!--end global-header-bar-->
+
+
+<main id="content" role="main">
+
+    <div class="phase-banner-alpha">
+        <p>
+            <strong class="phase-tag">ALPHA</strong>
+            <span>Income Checker</span>
+        </p>
+    </div>
+
+    <div class="error-summary" data-bind="visible: serverError" style="display: none">
+        <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+          Connection Problem
+        </h1>
+
+        <p id="serverError" data-bind="text: serverError"></p>
+    </div>
+
+    <div class="column-full-width">
+        <div id="page1" data-bind="visible: currentPage() === 1">
+            <h1 class="heading-xlarge">What are the individual's details?</h1>
+
+            <div class="form-group">
+                <form data-bind="submit: search, with: request">
+
+                    <div data-bind="css: { error: $parent.errorFields.indexOf('nino') >= 0 || $parent.errorFields.indexOf('nino-length') >= 0 }">
+                        <label for="nino" class="form-label" data-bind="css: { 'form-label-bold': $parent.errorFields.indexOf('nino') >= 0 }">
+                            <span>National Insurance Number</span>
+                        </label>
+                        <span class="form-hint">For Example, 'QQ 12 34 56 C'</span>
+                        <span id="nino-error" class="error-message" data-bind="visible: $parent.errorFields.indexOf('nino') >= 0" style="display: none">Please provide a National Insurance Number</span>
+                        <span id="nino-length-error" class="error-message" data-bind="visible: $parent.errorFields.indexOf('nino-length') >= 0" style="display: none">Please provide a valid National Insurance Number</span>
+                        <input type="text" id="nino" class="form-control" data-bind="textInput: nino"  autocomplete="off">
+                    </div>
+
+                    <br/><br/>
+
+                    <div class="form-date" data-bind="css: { error: $parent.errorFields.indexOf('fromDateDay') >= 0 |
+                                                    $parent.errorFields.indexOf('fromDateMonth') >= 0 |
+                                                    $parent.errorFields.indexOf('fromDateYear') >= 0 }">
+
+                        <label for="income_from_date" class="form-label" data-bind="css: { 'form-label-bold': $parent.errorFields.indexOf('fromDateDay') >= 0 |
+                                                    $parent.errorFields.indexOf('fromDateMonth') >= 0 |
+                                                    $parent.errorFields.indexOf('fromDateYear') >= 0 }">
+                            <span>Income From Date</span>
+                        </label>
+                        <span class="form-hint">For Example, 31/3/1988</span>
+                        <span id="from-date-error" class="error-message" data-bind="visible: $parent.errorFields.indexOf('fromDateDay') >= 0 |
+                                                                                                $parent.errorFields.indexOf('fromDateMonth') >= 0 |
+                                                                                                $parent.errorFields.indexOf('fromDateYear') >= 0"
+                              style="display: none">Please provide an Income From Date</span>
+                        <div class="form-group form-group-day">
+                            <input type="number" maxlength="2" id="fromDateDay" class="form-control" data-bind="textInput: fromDateDay"  autocomplete="off">
+                        </div>
+                        <div class="form-group form-group-month">
+                            <input type="number" maxlength="2" id="fromDateMonth" class="form-control" data-bind="textInput: fromDateMonth"  autocomplete="off">
+                        </div>
+                        <div class="form-group form-group-year">
+                            <input type="number" maxlength="4" id="fromDateYear" class="form-control" data-bind="textInput: fromDateYear"  autocomplete="off">
+                        </div>
+                    </div>
+
+                    <br/><br/>
+
+                    <div class="form-date" data-bind="css: { error: $parent.errorFields.indexOf('toDateDay') >= 0 |
+                                                     $parent.errorFields.indexOf('toDateMonth') >= 0 |
+                                                     $parent.errorFields.indexOf('toDateYear') >= 0}">
+
+                        <label for="income_to_date" class="form-label" data-bind="css: { 'form-label-bold': $parent.errorFields.indexOf('toDateDay') >= 0 |
+                                                                                                $parent.errorFields.indexOf('toDateMonth') >= 0 |
+                                                                                                $parent.errorFields.indexOf('toDateYear') >= 0 }">
+                            <span>Income To Date</span>
+                        </label>
+                        <span class="form-hint">For Example, 31/3/1988</span>
+                        <span id="to-date-error" class="error-message" data-bind="visible: $parent.errorFields.indexOf('toDateDay') >= 0 |
+                                                                                            $parent.errorFields.indexOf('toDateMonth') >= 0 |
+                                                                                            $parent.errorFields.indexOf('toDateYear') >= 0"
+                              style="display: none">Please provide an Income To Date</span>
+                        <div class="form-group form-group-day">
+                            <input type="number" maxlength="2" id="toDateDay" class="form-control-1-8" data-bind="textInput: toDateDay">
+                        </div>
+                        <div class="form-group form-group-month">
+                            <input type="number" maxlength="2" id="toDateMonth" class="form-control-1-8" data-bind="textInput: toDateMonth">
+                        </div>
+                        <div class="form-group form-group-year">
+                            <input type="number" maxlength="4" id="toDateYear" class="form-control-1-8" data-bind="textInput: toDateYear">
+                        </div>
+                    </div>
+
+                    <br/>
+                    <br/>
+                    <input name="search" type="submit" class="button" data-bind="value: $parent.processing() ? 'Checking ...' : 'Check income', css: { disabled: $parent.processing }">
+                </form>
+            </div>
+        </div>
+
+        <div id="page2" data-bind="visible: currentPage() === 2" style="display: none">
+            <h1 class="heading-large">Individual's income</h1>
+            <h2 class="heading-medium">
+                Your search
+            </h2>
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Individual</th>
+                    <th scope="col">National Insurance Number</th>
+                    <th scope="col">From date</th>
+                    <th scope="col">To date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td id="yourSearchIndividualName"><span data-bind="text: result.forename" ></span> <span data-bind="text: result.surname"></span></td>
+                    <td id="yourSearchNationalInsuranceNumber"><span data-bind="text: request.nino" ></span></td>
+                    <td id="yourSearchFromDate"><span data-bind="text: formatFromDate()"></span></td>
+                    <td id="yourSearchToDate"><span data-bind="text: formatToDate()"></span></td>
+                </tr>
+                </tbody>
+            </table>
+            <h2 class="heading-medium">
+                Income details
+            </h2>
+            <table>
+                <thead>
+                <th>Payment date</th>
+                <th>Employer</th>
+                <th>Income</th>
+                </thead>
+                <tbody data-bind="foreach: result.incomes">
+                <tr>
+                    <td scope="col" data-bind="text: payDate"></td>
+                    <td scope="col" data-bind="text: employer"></td>
+                    <td scope="col" data-bind="text: income"></td>
+                </tr>
+                </tbody>
+                <tr>
+                    <td><span style="font-weight: bold">Total:</span></td>
+                    <td></td>
+                    <td style="font-weight: bold" ><span data-bind="text: result.total"></span></td>
+                </tr>
+            </table>
+            <br/>
+            <br/>
+            <form data-bind="submit: reset">
+                <input type="submit" class="button" value="Search again">
+            </form>
+
+        </div>
+    </div>
+</main>
+
+<!-- Page content goes here -->
+
+<footer class="group js-footer" id="footer" role="contentinfo">
+
+    <div class="footer-wrapper">
+
+
+        <div class="footer-meta">
+            <div class="footer-meta-inner">
+
+
+                <div class="open-government-licence">
+                    <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+                                       rel="license">Open Government Licence</a></p>
+
+                    <p>All content is available under the <a
+                            href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+                            rel="license">Open Government Licence v3.0</a>, except where otherwise stated</p>
+
+                </div>
+            </div>
+
+            <div class="copyright">
+                <a href="http://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">©
+                    Crown copyright</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!--end footer-->
+
+<div id="global-app-error" class="app-error hidden"></div>
+
+<script src="/assets/javascripts/govuk-template.js" type="text/javascript"></script>
+
+
+</body>
+</html>
