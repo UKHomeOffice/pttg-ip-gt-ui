@@ -46,6 +46,10 @@
             return accounting.formatMoney(vm.model.threshold.amount, { symbol: CURRENCY_SYMBOL, precision: 0});
         };
 
+        vm.formatMoney = function(moneyToFormat) {
+            return accounting.formatMoney(moneyToFormat, { symbol: CURRENCY_SYMBOL, precision: 2});
+        };
+
         vm.getFullFromDate = function() {
                 var month = vm.model.fromDateMonth > 9 ? vm.model.fromDateMonth : '0' + vm.model.fromDateMonth;
                 var day = vm.model.fromDateDay > 9 ? vm.model.fromDateDay : '0' + vm.model.fromDateDay
@@ -81,8 +85,6 @@
 
                 restService.checkApplication(vm.model.nino, vm.getFullFromDate(), vm.getFullToDate())
                     .then(function(data) {
-                        console.log(data);
-                        console.log(data.individual);
                         vm.model.applicant = data.individual;
                         vm.model.incomes = data.incomes;
                         vm.model.total = data.total;

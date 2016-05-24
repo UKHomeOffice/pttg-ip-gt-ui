@@ -34,17 +34,15 @@
         </thead>
         <tbody ng-repeat="income in vm.model.incomes">
         <tr>
-            {{console.log(income.paydate);}}
-            {{console.log(income.employer);}}
             <td scope="col">{{vm.formatDate(income.payDate)}}</td>
             <td scope="col">{{income.employer}}</td>
-            <td scope="col">{{income.income}}</td>
+            <td scope="col">{{vm.formatMoney(income.income)}}</td>
         </tr>
         </tbody>
         <tr>
             <td><span style="font-weight: bold">Total:</span></td>
             <td></td>
-            <td style="font-weight: bold" >{{vm.model.formatToDate()}}</td>
+            <td style="font-weight: bold" >{{vm.formatMoney(vm.model.total)}}</td>
         </tr>
     </table>
     <br/>
