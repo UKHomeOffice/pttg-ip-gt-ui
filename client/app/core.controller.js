@@ -32,8 +32,11 @@
         };
 
         vm.validateError = false;
-        vm.dateInvalidError = false;
-        vm.dateMissingError = false;
+        vm.fromDateInvalidError = false;
+        vm.fromDateMissingError = false;
+        vm.toDateInvalidError = false;
+        vm.toDateMissingError = false;
+
         vm.ninoMissingError = false;
         vm.ninoInvalidError = false;
         vm.ninoNotFoundError = false;
@@ -108,15 +111,17 @@
             vm.ninoInvalidError = false;
             vm.restError = false;
             vm.ninoMissingError = false;
-            vm.dateMissingError = false;
-            vm.dateInvalidError = false;
+            vm.fromDateMissingError = false;
+            vm.fromDateInvalidError = false;
+            vm.toDateMissingError = false;
+            vm.toDateInvalidError = false;
             vm.serverError = '';
             vm.validateError = false;
         }
 
         function validateForm(){
             var validated = true;
-           /* clearErrors();
+            clearErrors();
 
             vm.model.nino =  vm.model.nino.replace(/ /g,'');
 
@@ -136,22 +141,30 @@
             if (vm.model.fromDateDay === null ||
                 vm.model.fromDateMonth === null ||
                 vm.model.fromDateYear === null  ) {
-                vm.queryForm.applicationRaisedDateDay.$setValidity(false);
-                vm.queryForm.applicationRaisedDateMonth.$setValidity(false);
-                vm.queryForm.applicationRaisedDateYear.$setValidity(false);
-                vm.dateMissingError = true;
+                vm.queryForm.fromDateDay.$setValidity(false);
+                vm.queryForm.fromDateMonth.$setValidity(false);
+                vm.queryForm.fromDateYear.$setValidity(false);
+                vm.fromDateMissingError = true;
                 validated = false;
-            } else  if (!moment(vm.getFullDate(), DATE_VALIDATE_FORMAT, true).isValid()){
-                vm.dateInvalidError = true;
-                validated = false;
-            }
-
-            if (vm.model.dependants !== null && !(/^\d{0,2}$/.test(vm.model.dependants))){
-                vm.dependantsInvalidError = true;
+            } else  if (!moment(vm.getFullFromDate(), DATE_VALIDATE_FORMAT, true).isValid()){
+                vm.fromDateInvalidError = true;
                 validated = false;
             }
 
-            vm.model.nino = vm.model.nino.toUpperCase();*/
+            if (vm.model.toDateDay === null ||
+                vm.model.toDateMonth === null ||
+                vm.model.toDateYear === null  ) {
+                vm.queryForm.toDateDay.$setValidity(false);
+                vm.queryForm.toDateMonth.$setValidity(false);
+                vm.queryForm.toDateYear.$setValidity(false);
+                vm.toDateMissingError = true;
+                validated = false;
+            } else  if (!moment(vm.getFullToDate(), DATE_VALIDATE_FORMAT, true).isValid()){
+                vm.toDateInvalidError = true;
+                validated = false;
+            }
+
+            vm.model.nino = vm.model.nino.toUpperCase();
             return validated;
         }
     }
