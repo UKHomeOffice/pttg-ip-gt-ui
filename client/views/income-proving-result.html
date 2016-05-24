@@ -21,7 +21,7 @@
         </thead>
         <tbody>
         <tr>
-            <td id="yourSearchIndividualName">{{vm.model.individual.forename}} {{vm.model.applicant.surname}}</td>
+            <td id="yourSearchIndividualName">{{vm.model.applicant.forename}} {{vm.model.applicant.surname}}</td>
             <td id="yourSearchNationalInsuranceNumber">{{vm.model.applicant.nino}}</td>
             <td id="yourSearchFromDate">{{vm.formatFromDate()}}</td>
             <td id="yourSearchToDate">{{vm.formatToDate()}}</td>
@@ -39,7 +39,9 @@
         </thead>
         <tbody ng-repeat="income in vm.model.incomes">
         <tr>
-            <td scope="col">{{income.paydate | date:'MM/dd/yyyy'}}</td>
+            {{console.log(income.paydate);}}
+            {{console.log(income.employer);}}
+            <td scope="col">{{income.payDate}}</td>
             <td scope="col">{{income.employer}}</td>
             <td scope="col">{{income.income}}</td>
         </tr>
