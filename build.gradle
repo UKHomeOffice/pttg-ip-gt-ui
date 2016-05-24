@@ -76,6 +76,7 @@ dependencies {
     testCompile 'org.apache.commons:commons-lang3:3.4'
     testCompile "org.codehaus.groovy:groovy-all:2.4.5"
     testCompile 'org.springframework:spring-test:4.2.5.RELEASE'
+    testCompile 'com.jayway.jsonpath:json-path:2.1.0'
 
     // - Rest-Assured
 

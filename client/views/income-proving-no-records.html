@@ -19,13 +19,15 @@
     <thead>
     <tr>
         <th scope="col">National Insurance Number</th>
-        <th scope="col">Application date</th>
+        <th scope="col">From date</th>
+        <th scope="col">To date</th>
     </tr>
     </thead>
     <tbody>
     <tr>
         <td><span id="yourSearchNationalInsuranceNumber">{{vm.model.nino}}</span></td>
-        <td><span id="yourSearchApplicationRaisedDate">{{vm.formatDate()}}</span></td>
+        <td><span id="yourSearchFromDate">{{vm.formatFromDate()}}</span></td>
+        <td><span id="yourSearchToDate">{{vm.formatToDate()}}</span></td>
     </tr>
     </tbody>
 </table>

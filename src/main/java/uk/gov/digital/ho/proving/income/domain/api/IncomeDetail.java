@@ -40,4 +40,13 @@ public class IncomeDetail {
     public void setIncome(String income) {
         this.income = income;
     }
+
+    @Override
+    public String toString() {
+        return "IncomeDetail{" +
+                "payDate='" + payDate + '\'' +
+                ", employer='" + employer + '\'' +
+                ", income='" + income + '\'' +
+                '}';
+    }
 }

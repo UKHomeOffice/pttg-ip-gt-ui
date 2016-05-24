@@ -16,17 +16,16 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.web.util.UriTemplate;
 import uk.gov.digital.ho.proving.income.domain.api.APIResponse;
-import uk.gov.digital.ho.proving.income.domain.api.Applicant;
+import uk.gov.digital.ho.proving.income.domain.api.Individual;
+import uk.gov.digital.ho.proving.income.domain.api.IncomeDetail;
 
 import javax.ws.rs.core.Response;
-
 import java.net.URI;
 
+import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Created by lbennett on 23/05/16.
@@ -41,6 +40,14 @@ public class ServiceTest {
     public static final String FROM_DATE = "2016-12-12";
     public static final String TO_DATE = "2016-12-12";
     public static final String BAD_DATE = "7567/4545";
+    public static final String PAY_DATE_MONTH1 = "23/04/2016";
+    public static final String PAY_DATE_MONTH2 = "23/04/2016";
+    public static final String EMPLOYER_NAME = "Nice Employer";
+    public static final String PAYMENT_AMOUNT = "2000";
+    public static final String PAYMENT_TOTAL = "4000";
+    public static final String FORENAME = "Jo";
+    public static final String SURNAME = "Madness";
+    public static final String MR = "Mr";
 
     private MockMvc mockMvc;
 
@@ -74,9 +81,8 @@ public class ServiceTest {
         final MvcResult mvcResult = this.mockMvc.perform(MockMvcRequestBuilders.get(url)
                 .accept(MediaType.parseMediaType("application/json")))
                 .andDo(print()).andExpect(status().isOk())
-                .andExpect(content().contentType("application/json")).andReturn();
-
-        String content = mvcResult.getResponse().getContentAsString();
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.individual.forename").value(FORENAME)).andReturn();
     }
 
 
@@ -111,8 +117,8 @@ public class ServiceTest {
 
     private void withApiResult() {
         APIResponse apiResponse = new APIResponse();
-        apiResponse.setApplicant(new Applicant());
-        Mockito.when(clientResponse.getEntity(APIResponse.class)).thenReturn(apiResponse);
+        apiResponse.setIndividual(new Individual());
+        Mockito.when(clientResponse.getEntity(APIResponse.class)).thenReturn(buildResponse());
     }
 
     private void withResponse(URI url, Response.Status status) {
@@ -121,6 +127,18 @@ public class ServiceTest {
         Mockito.when(mockBuilder.header("content-type", "application/json")).thenReturn(mockBuilder);
         Mockito.when(mockBuilder.get(ClientResponse.class)).thenReturn(clientResponse);
         Mockito.when(clientResponse.getStatusInfo()).thenReturn(status);
+
+    }
+
+    private APIResponse buildResponse(){
+        APIResponse response = new APIResponse();
+        IncomeDetail id1 = new IncomeDetail(PAY_DATE_MONTH1, EMPLOYER_NAME, PAYMENT_AMOUNT);
+        IncomeDetail id2 = new IncomeDetail(PAY_DATE_MONTH2, EMPLOYER_NAME, PAYMENT_AMOUNT);
+        IncomeDetail[] incomes = {id1, id2};
+        response.setIncomes(incomes);
+        response.setTotal(PAYMENT_TOTAL);
+        response.setIndividual(new Individual(MR, FORENAME, SURNAME, NINO));
+        return response;
     }
 
 }

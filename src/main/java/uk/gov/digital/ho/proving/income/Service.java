@@ -1,11 +1,8 @@
 package uk.gov.digital.ho.proving.income;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,11 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.web.util.UriTemplate;
-import uk.gov.digital.ho.proving.income.domain.*;
 import uk.gov.digital.ho.proving.income.domain.ResponseStatus;
 import uk.gov.digital.ho.proving.income.domain.api.APIResponse;
-import uk.gov.digital.ho.proving.income.domain.client.IncomeRequest;
 import uk.gov.digital.ho.proving.income.domain.client.IncomeResponse;
 
 import javax.ws.rs.core.MediaType;
@@ -64,6 +58,7 @@ public class Service {
         LOGGER.info(apiResult.toString());
 
         response.setStatus(clientResponse.getStatusInfo().getReasonPhrase());
+        //if(true)return new ResponseEntity<>(response, HttpStatus.NOT_FOUND/*HttpStatus.valueOf(response.getStatus()*/);
 
         if (clientResponse.getStatusInfo().getReasonPhrase().equalsIgnoreCase("404")) {
             response.setStatus("unknown resource");
@@ -71,7 +66,7 @@ public class Service {
             if (apiResult != null && apiResult.getIncomes() != null) {
                 response.setIncomes(apiResult.getIncomes());
                 response.setTotal(apiResult.getTotal()); //@TODO where is the total calculated?
-                response.setApplicant(apiResult.getApplicant());
+                response.setIndividual(apiResult.getIndividual());
             }
         }
 

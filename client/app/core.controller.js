@@ -74,7 +74,10 @@
 
                 restService.checkApplication(vm.model.nino, vm.getFullFromDate(), vm.getFullToDate())
                     .then(function(data) {
-                        vm.model.applicant = data.applicant;
+                        console.log(data);
+                        console.log(data.individual);
+                        vm.model.applicant = data.individual;
+                        vm.model.incomes = data.incomes;
                         vm.model.total;
                         $location.path('/income-proving-result');
                     }).catch(function(error) {

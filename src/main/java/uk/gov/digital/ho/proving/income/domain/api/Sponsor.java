@@ -8,6 +8,9 @@ public class Sponsor {
     private boolean canSupportApplicant;
     private String applicantNino;
 
+    public Sponsor() {
+    }
+
     public String getApplicantNino() {
         return applicantNino;
     }
@@ -30,5 +33,14 @@ public class Sponsor {
 
     public void setCanSupportApplicant(boolean canSupportApplicant) {
         this.canSupportApplicant = canSupportApplicant;
+    }
+
+    @Override
+    public String toString() {
+        return "Sponsor{" +
+                "nino='" + nino + '\'' +
+                ", canSupportApplicant=" + canSupportApplicant +
+                ", applicantNino='" + applicantNino + '\'' +
+                '}';
     }
 }

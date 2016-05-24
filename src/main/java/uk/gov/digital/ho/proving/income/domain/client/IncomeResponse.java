@@ -1,6 +1,6 @@
 package uk.gov.digital.ho.proving.income.domain.client;
 
-import uk.gov.digital.ho.proving.income.domain.api.Applicant;
+import uk.gov.digital.ho.proving.income.domain.api.Individual;
 import uk.gov.digital.ho.proving.income.domain.api.IncomeDetail;
 
 /**
@@ -10,7 +10,7 @@ public class IncomeResponse {
     private String status;
     private IncomeDetail[] incomes;
     private String total;
-    private Applicant applicant;
+    private Individual individual;
 
     public String getStatus() {
         return status;
@@ -36,11 +36,11 @@ public class IncomeResponse {
         this.total = total;
     }
 
-    public Applicant getApplicant() {
-        return applicant;
+    public Individual getIndividual() {
+        return individual;
     }
 
-    public void setApplicant(Applicant applicant) {
-        this.applicant = applicant;
+    public void setIndividual(Individual individual) {
+        this.individual = individual;
     }
 }
