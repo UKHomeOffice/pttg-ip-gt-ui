@@ -220,10 +220,17 @@ class ProvingThingsTestSteps {
     @Then("^The service displays the following message:\$")
     public void the_service_displays_the_following_message(DataTable arg1) {
 
-        Map<String, String> entries = arg1.asMap(String.class, String.class)
-        driver.sleep(delay)
-        assert driver.findElement(By.id(toCamelCase("Page sub title"))).getText() == entries.get("Page sub title")
-        assert driver.findElement(By.id(toCamelCase("Page sub text"))).getText() == entries.get("Page sub text")
+        if (driver.currentUrl == "http://localhost:8001/income-proving-tool.html") {
+            Map<String, String> entries = arg1.asMap(String.class, String.class)
+            driver.sleep(delay)
+            assert driver.findElement(By.id(entries.get("Error Field"))).getText() == entries.get("Error Message")
+        } else if (driver.currentUrl.startsWith("http://localhost:8000/")) {
+            Map<String, String> entries = arg1.asMap(String.class, String.class)
+            driver.sleep(delay)
+            //assert driver.findElement(By.id(entries.get("Error Field"))).getText() == entries.get("Error Message")
+        } else {
+            assert false
+        }
     }
 
     @Then("^The service provides the following Your search results:\$")
