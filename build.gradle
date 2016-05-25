@@ -12,10 +12,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE")
         classpath("com.moowork.gradle:gradle-node-plugin:0.12")
         classpath("com.moowork.gradle:gradle-gulp-plugin:0.12")
-        //classpath 'com.wiredforcode:gradle-spawn-plugin:0.6.0'
         classpath 'net.serenity-bdd:serenity-gradle-plugin:1.1.31'
-        classpath 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.4'
-
     }
 }
 
@@ -24,7 +21,6 @@ apply plugin: 'groovy'
 apply plugin: 'spring-boot'
 apply plugin: 'application'
 apply plugin: 'com.moowork.gulp'
-//apply plugin: 'com.wiredforcode.spawn'
 apply plugin: 'net.serenity-bdd.aggregator'
 
 sourceCompatibility = 1.8
