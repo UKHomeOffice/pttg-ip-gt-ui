@@ -154,6 +154,7 @@ public class ServiceTest {
         Mockito.when(mockBuilder.header("content-type", "application/json")).thenReturn(mockBuilder);
         Mockito.when(mockBuilder.get(ClientResponse.class)).thenReturn(clientResponse);
         Mockito.when(clientResponse.getStatusInfo()).thenReturn(status);
+        Mockito.when(clientResponse.getStatus()).thenReturn(status.getStatusCode());
 
     }
 

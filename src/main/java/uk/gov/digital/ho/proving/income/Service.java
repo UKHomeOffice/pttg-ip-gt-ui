@@ -18,6 +18,7 @@ import uk.gov.digital.ho.proving.income.domain.api.APIResponse;
 import uk.gov.digital.ho.proving.income.domain.client.IncomeResponse;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.time.LocalDate;
 
@@ -57,20 +58,16 @@ public class Service {
 
         LOGGER.info(apiResult.toString());
 
-        response.setStatus(clientResponse.getStatusInfo().getReasonPhrase());
-        //if(true)return new ResponseEntity<>(response, HttpStatus.NOT_FOUND/*HttpStatus.valueOf(response.getStatus()*/);
+        if (clientResponse.getStatusInfo().equals(Response.Status.OK)) {
 
-        if (clientResponse.getStatusInfo().getReasonPhrase().equalsIgnoreCase("404")) {
-            response.setStatus("unknown resource");
-        } else {
             if (apiResult != null && apiResult.getIncomes() != null) {
                 response.setIncomes(apiResult.getIncomes());
-                response.setTotal(apiResult.getTotal()); //@TODO where is the total calculated?
+                response.setTotal(apiResult.getTotal());
                 response.setIndividual(apiResult.getIndividual());
             }
         }
 
-        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+        return new ResponseEntity<>(response, HttpStatus.valueOf(clientResponse.getStatus()));
     }
 
     private WebResource buildUrl(String nino, LocalDate toDate, LocalDate fromDate) {
