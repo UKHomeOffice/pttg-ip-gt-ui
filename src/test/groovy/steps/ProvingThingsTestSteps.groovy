@@ -72,8 +72,8 @@ class ProvingThingsTestSteps {
                 if (v != null && v.length() != 0) {
 
                     String day = v.substring(0, v.indexOf("/"))
-                    String month = v.substring(v.indexOf("/")+1, v.lastIndexOf("/"))
-                    String year = v.substring(v.lastIndexOf("/")+1)
+                    String month = v.substring(v.indexOf("/") + 1, v.lastIndexOf("/"))
+                    String year = v.substring(v.lastIndexOf("/") + 1)
 
                     sendKeys(driver.findElement(By.id(key + "Day")), day)
                     sendKeys(driver.findElement(By.id(key + "Month")), month)
@@ -197,18 +197,18 @@ class ProvingThingsTestSteps {
     @Then("^The service provides the following result:\$")
     public void the_service_provides_the_following_results(DataTable expectedResult) {
         String amount
-        for (int i = 1; i < expectedResult.raw().size()+1; i++) {
-            String row = expectedResult.raw.get(i-1)
+        for (int i = 1; i < expectedResult.raw().size() + 1; i++) {
+            String row = expectedResult.raw.get(i - 1)
 
             String[] column_data = row.split(",")
 
             driver.sleep(delay)
 
-            def dateXpath = '//*[@id="page2"]/table[2]/tbody['+i+']/tr/td[1]'
+            def dateXpath = '//*[@id="page2"]/table[2]/tbody[' + i + ']/tr/td[1]'
             assert column_data[0].contains(driver.findElement(By.xpath(dateXpath)).getText())
             println "dateXpath: " + driver.findElement(By.xpath(dateXpath)).getText()
 
-            def amountXpath = '//*[@id="page2"]/table[2]/tbody['+i+']/tr/td[3]'
+            def amountXpath = '//*[@id="page2"]/table[2]/tbody[' + i + ']/tr/td[3]'
 
             amount = column_data[2] + "," + column_data[3]
             println "Amount --------->" + amount
@@ -220,17 +220,10 @@ class ProvingThingsTestSteps {
     @Then("^The service displays the following message:\$")
     public void the_service_displays_the_following_message(DataTable arg1) {
 
-        if (driver.currentUrl == "http://localhost:8001/income-proving-tool.html") {
-            Map<String, String> entries = arg1.asMap(String.class, String.class)
-            driver.sleep(delay)
-            assert driver.findElement(By.id(entries.get("Error Field"))).getText() == entries.get("Error Message")
-        } else if (driver.currentUrl.startsWith("http://localhost:8000/")) {
-            Map<String, String> entries = arg1.asMap(String.class, String.class)
-            driver.sleep(delay)
-            assert driver.findElement(By.id(entries.get("Error Field"))).getText() == entries.get("Error Message")
-        } else {
-            assert false
-        }
+        Map<String, String> entries = arg1.asMap(String.class, String.class)
+        driver.sleep(delay)
+        assert driver.findElement(By.id(toCamelCase("Page sub title"))).getText() == entries.get("Page sub title")
+        assert driver.findElement(By.id(toCamelCase("Page sub text"))).getText() == entries.get("Page sub text")
     }
 
     @Then("^The service provides the following Your search results:\$")
