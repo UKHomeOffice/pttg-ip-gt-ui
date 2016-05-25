@@ -58,9 +58,9 @@ public class Service {
 
         LOGGER.info(apiResult.toString());
 
-        if (clientResponse.getStatusInfo().equals(Response.Status.OK)) {
+        if (clientResponse.getStatusInfo().getStatusCode()==(Response.Status.OK.getStatusCode())) {
 
-            if (apiResult != null && apiResult.getIncomes() != null) {
+            if (apiResult != null) {
                 response.setIncomes(apiResult.getIncomes());
                 response.setTotal(apiResult.getTotal());
                 response.setIndividual(apiResult.getIndividual());
