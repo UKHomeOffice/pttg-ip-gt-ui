@@ -477,15 +477,14 @@ class ProvingThingsTestSteps {
         driver.sleep(delay)
         WebElement yourSearchNationalInsuranceNumber = driver.findElement(By.id("yourSearchNationalInsuranceNumber"))
         driver.sleep(delay)
-        WebElement yourSearchApplicationReceivedDate = driver.findElement(By.id("yourSearchApplicationReceivedDate"))
+        WebElement yourSearchFromDate = driver.findElement(By.id("yourSearchFromDate"))
+        WebElement yourSearchToDate = driver.findElement(By.id("yourSearchToDate"))
 
         for (String s : tableKey) {
             // driver.sleep(delay)
             if (s == "Page dynamic heading") {
-
                 assert entries.get(s).contains(pageDynamicHeading.getText())
                 println "Page Dynamic Heading : " + pageDynamicHeading.getText()
-
             }
 
             if (s == "Page dynamic sub text") {
@@ -494,18 +493,21 @@ class ProvingThingsTestSteps {
                 println "Page dynamic sub text: " + pageDynamicSubText.getText()
             }
 
-
-
             if (s == "Your Search National Insurance Number") {
-
                 assert entries.get(s).contains(yourSearchNationalInsuranceNumber.getText())
                 println "Your Search National Insurance Number :" + yourSearchNationalInsuranceNumber.getText()
             }
 
-            if (s == "Your Search Application Received Date") {
+            if (s == "Your Search From Date") {
                 driver.sleep(delay)
-                assert entries.get(s).contains(yourSearchApplicationReceivedDate.getText())
-                println "Your Search Application Received Date :" + yourSearchApplicationReceivedDate.getText()
+                assert entries.get(s).contains(yourSearchFromDate.getText())
+                println "Your Search From Date :" + yourSearchFromDate.getText()
+            }
+
+            if (s == "Your Search To Date") {
+                driver.sleep(delay)
+                assert entries.get(s).contains(yourSearchToDate.getText())
+                println "Your Search To Date :" + yourSearchToDate.getText()
             }
 
         }
