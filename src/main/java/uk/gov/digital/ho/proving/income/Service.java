@@ -44,7 +44,7 @@ public class Service {
                                       @RequestParam(value = "toDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
 
 
-        LOGGER.info("CheckIncome: Nino - {} From Date - {} To Date - {}", nino, fromDate, toDate);
+        LOGGER.debug("CheckIncome: Nino - {} From Date - {} To Date - {}", nino, fromDate, toDate);
 
         IncomeResponse response = new IncomeResponse();
 
@@ -56,7 +56,7 @@ public class Service {
 
         APIResponse apiResult = clientResponse.getEntity(APIResponse.class);
 
-        LOGGER.info(apiResult.toString());
+        LOGGER.debug(apiResult.toString());
 
         if (clientResponse.getStatusInfo().getStatusCode()==(Response.Status.OK.getStatusCode())) {
 

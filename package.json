@@ -38,6 +38,12 @@
     "node-sass": "^3.4.2",
     "require-dir": "^0.3.0",
     "wiredep": "^2.2.2",
-    "yargs": "^3.15.0"
+    "yargs": "^3.15.0",
+    "karma": "~0.13.22",
+    "karma-jasmine": "~1.0.2",
+    "karma-chrome-launcher": "~1.0.1",
+    "phantomjs-prebuilt": "~2.1.7",
+    "karma-phantomjs-launcher": "~1.0.0",
+    "karma-ng-html2js-preprocessor": "~1.0.0"
   }
 }
