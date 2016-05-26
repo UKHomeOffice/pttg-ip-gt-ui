@@ -2,7 +2,7 @@ Feature: Tool identifies applicant NINO does not exist
 #New Scenario - Added in SD156
   Scenario: Caseworker enters a NINO where no records exist within the period stated
 
-    Given Caseworker is using the Income Proving Service Case Worker Tool
+    Given Robert is using the IPS Generic Tool
     When Robert submits a query:
       | NINO                  | RK123456C  |
       | From Date | 01/01/2015 |
@@ -17,7 +17,7 @@ Feature: Tool identifies applicant NINO does not exist
 #New Scenario - Added in SD156
   Scenario: Caseworker enters a NINO where no records exist within the period stated
 
-    Given Caseworker is using the Income Proving Service Case Worker Tool
+    Given Robert is using the IPS Generic Tool
     When Robert submits a query:
       | NINO                  | KR123456C  |
       | From Date | 01/04/2015 |
