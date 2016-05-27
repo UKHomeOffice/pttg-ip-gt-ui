@@ -42,10 +42,6 @@
         vm.ninoNotFoundError = false;
         vm.serverError = '';
 
-        vm.formatAmount = function() {
-            return accounting.formatMoney(vm.model.threshold.amount, { symbol: CURRENCY_SYMBOL, precision: 0});
-        };
-
         vm.formatMoney = function(moneyToFormat) {
             return accounting.formatMoney(moneyToFormat, { symbol: CURRENCY_SYMBOL, precision: 2});
         };
