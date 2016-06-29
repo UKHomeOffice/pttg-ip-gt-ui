@@ -36,7 +36,6 @@ task wrapper(type: Wrapper) {
 
 jar {
     baseName = 'pttg-income-proving-ui'
-    baseName = 'pttg-income-proving-api'
     if (System.getenv('BUILD_NUMBER')) {
       version =  version + '-' + System.getenv('BUILD_NUMBER')
     }
