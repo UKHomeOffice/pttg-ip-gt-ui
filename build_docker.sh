@@ -2,10 +2,14 @@
 set -e
 [ -n "${DEBUG}" ] && set -x
 
-GRADLE_IMAGE="quay.io/ukhomeofficedigital/gradle:v2.13.5"
+GRADLE_IMAGE="quay.io/ukhomeofficedigital/gradle-nodejs:v2.13.1"
 GIT_COMMIT=${GIT_COMMIT:-$(git rev-parse --short HEAD)}
 GIT_COMMIT=${GIT_COMMIT:0:7}
 VERSION=$(grep ^version build.gradle | cut -d= -f 2 | tr -d ' ' | sed -e "s|'||g")
+
+build_nodejs() {
+  docker build -t "${GRADLE_IMAGE}" -f Dockerfile.nodejs .
+}
 
 build() {
 
@@ -40,6 +44,7 @@ dockerPublish() {
   docker push quay.io/ukhomeofficedigital/pttg-income-proving-ui:${VERSION}
 }
 
+build_nodejs
 build "${@}"
 setProps
 dockerBuild
