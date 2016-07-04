@@ -2,10 +2,14 @@
 set -e
 [ -n "${DEBUG}" ] && set -x
 
-GRADLE_IMAGE="quay.io/ukhomeofficedigital/gradle:v2.13.5"
+GRADLE_IMAGE="quay.io/ukhomeofficedigital/gradle-nodejs:v2.13.1"
 GIT_COMMIT=${GIT_COMMIT:-$(git rev-parse --short HEAD)}
 GIT_COMMIT=${GIT_COMMIT:0:7}
-VERSION=$(grep ^version build.gradle | cut -d= -f 2 | tr -d ' ' | sed -e "s|'||g")
+VERSION=$(grep ^version build.gradle | cut -d= -f 2 | tr -d ' ' | sed -e "s|'||g" | sed -e "s|version|v|g")
+
+build_nodejs() {
+  docker build -t "${GRADLE_IMAGE}" -f Dockerfile.nodejs .
+}
 
 build() {
 
@@ -15,7 +19,7 @@ build() {
 
   # Mount in local maven repository into the docker container
   [ -d "${HOME}/.m2/repository" ] && MOUNT="${MOUNT} -v ${HOME}/.m2/repository:/root/.m2/repository"
-  
+
   # Mount in local gradle user directory
   [ -d "${HOME}/.gradle" ] && MOUNT="${MOUNT} -v ${HOME}/.gradle:/root/.gradle"
 
@@ -40,7 +44,13 @@ dockerPublish() {
   docker push quay.io/ukhomeofficedigital/pttg-income-proving-ui:${VERSION}
 }
 
+echo "=== build_nodejs function"
+build_nodejs
+echo "=== build function"
 build "${@}"
+echo "=== setProps function"
 setProps
+echo "=== dockerBuild function"
 dockerBuild
+echo "=== dockerPublish function"
 dockerPublish

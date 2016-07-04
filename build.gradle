@@ -65,6 +65,17 @@ task accept(type: Test) {
     include 'acceptance/**'
 }
 
+task bowerLocalInstall(type: NodeTask) {
+    script = file('node_modules/bower/bin/bower')
+    args = [
+            "--allow-root",
+            'install'
+          ]
+    inputs.files file('bower.json')
+    outputs.files file('bower_components')
+    dependsOn npmInstall
+}
+
 accept.finalizedBy aggregate
 
 dependencies {
@@ -100,6 +111,7 @@ dependencies {
     testCompile  'org.json:json:20090211'
 }
 
+build.dependsOn bowerLocalInstall
 build.dependsOn gulp_build
 
 mainClassName="uk.gov.digital.ho.proving.income.ServiceRunner"
