@@ -23,6 +23,6 @@ COPY run.sh /app
 
 RUN chmod a+x /app/run.sh
 
-EXPOSE 8080
+EXPOSE 8000
 
 ENTRYPOINT /app/run.sh
