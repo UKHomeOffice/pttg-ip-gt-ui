@@ -1,7 +1,6 @@
 FROM quay.io/ukhomeofficedigital/gradle:v2.13.5
 
-MAINTAINER Jon Shanks "jon.shanks@digital.homeoffice.gov.uk" 
-
+MAINTAINER Jon Shanks "jon.shanks@digital.homeoffice.gov.uk"
 ENV NODE_VERSION v4.4.2
 ENV PATH "${PATH}:/opt/nodejs/bin"
 
@@ -10,7 +9,7 @@ WORKDIR /opt/nodejs
 RUN yum install -y curl git-all bzip2 && \
     curl https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.gz | tar xz --strip-components=1
 
-ADD . /code/
+COPY . /code/
 
 WORKDIR /code
 
