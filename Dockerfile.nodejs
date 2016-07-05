@@ -1,4 +1,4 @@
-FROM quay.io/ukhomeofficedigital/gradle:v2.13.5
+FROM quay.io/ukhomeofficedigital/gradle:v2.13.6
 
 MAINTAINER Jon Shanks "jon.shanks@digital.homeoffice.gov.uk"
 ENV NODE_VERSION v4.4.2
