@@ -32,7 +32,7 @@ build() {
 setProps() {
   [ -n "${BUILD_NUMBER}" ] && VERSION="${VERSION}-${BUILD_NUMBER}"
   [ -n "${GIT_COMMIT}" ] && VERSION="$VERSION.${GIT_COMMIT}"
-  echo "VERSION=${VERSION}" >> version.properties
+  echo "VERSION=${VERSION}" > version.properties
 }
 
 dockerBuild() {
