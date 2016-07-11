@@ -23,6 +23,8 @@ COPY run.sh /app
 
 RUN chmod a+x /app/run.sh
 
+USER pttg
+
 EXPOSE 8000
 
 ENTRYPOINT /app/run.sh
