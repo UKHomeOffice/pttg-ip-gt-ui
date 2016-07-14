@@ -44,6 +44,29 @@ dockerPublish() {
   docker push quay.io/ukhomeofficedigital/pttg-income-proving-ui:${VERSION}
 }
 
+function dockerCredentials() {
+    DOCKER_CREDS_DIR='/root/.docker'
+    SOURCE_CREDS='/root/.secrets/dockercfg'
+
+    if [[ -n ${AWS_REGION} ]] && [[ -d /root/.aws ]] && [[ -n ${JENKINS_OPTS} ]] && [[ -n ${JENKINS_HOME_S3_BUCKET_NAME} ]]
+    then
+        echo "running ${FUNCNAME[0]}"
+        echo "setting docker credentials"
+        if [[ ! -d ${DOCKER_CREDS_DIR} ]];
+        then
+            mkdir ${DOCKER_CREDS_DIR}
+            cp ${SOURCE_CREDS} ${DOCKER_CREDS_DIR}/config.json
+        else
+            cp ${SOURCE_CREDS} ${DOCKER_CREDS_DIR}/config.json
+        fi
+    else
+        echo "no credentials setup needed on local laptop/workstation ..."
+    fi
+
+}
+
+echo "=== docker credentials setup"
+dockerCredentials
 echo "=== build_nodejs function"
 build_nodejs
 echo "=== build function"
