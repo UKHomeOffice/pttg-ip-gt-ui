@@ -1,7 +1,7 @@
 package uk.gov.digital.ho.proving.income.domain.client;
 
-import uk.gov.digital.ho.proving.income.domain.api.Individual;
 import uk.gov.digital.ho.proving.income.domain.api.IncomeDetail;
+import uk.gov.digital.ho.proving.income.domain.api.Individual;
 
 /**
  * Created by andrewmoores on 10/02/2016.

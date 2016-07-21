@@ -3,7 +3,8 @@ import ch.qos.logback.core.ConsoleAppender
 import ch.qos.logback.core.FileAppender
 import ch.qos.logback.core.status.OnConsoleStatusListener
 
-import static ch.qos.logback.classic.Level.*
+import static ch.qos.logback.classic.Level.DEBUG
+import static ch.qos.logback.classic.Level.INFO
 
 // Add a status listener to record the state of the logback configuration when the logging system is initialised.
 statusListener(OnConsoleStatusListener)

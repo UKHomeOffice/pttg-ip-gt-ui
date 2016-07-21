@@ -1,19 +1,26 @@
 version: '2'
 services:
-  family:
-    container_name: FC-container
-#    build: .
-    image: quay.io/ukhomeofficedigital/pttg-family-migration-ui:0.1.0
+  pttg-generic-ui:
+    container_name: income-ui-container
+    image: quay.io/ukhomeofficedigital/pttg-income-proving-ui:v0.1.0-23.84ef12d
     ports:
-     - "8000:8000"
-    #use external links for containers started outside this compose
+     - "8000:8080"
     links:
-     - income
-  income:
-    container_name: income-container
-    image: quay.io/ukhomeofficedigital/pttg-family-migration-api:0.1.0
+     - pttg-income-proving-api.pt-i-dev.svc.cluster.local
+  pttg-income-proving-api.pt-i-dev.svc.cluster.local:
+    container_name: income-api-container
+    image: quay.io/ukhomeofficedigital/pttg-income-proving-api:0.1.0-87.0d84b86
     ports:
-     - "8081:8081"
+     - "80:8080"
+  pttg-mongodb.pt-i-dev.svc.cluster.local:
+    container_name: mongo-container
+    image: quay.io/ukhomeofficedigital/pttg-test-mongodb:0.1.0
+    ports:
+    - "27017:27017"
+  pttg-test-loader-mongodb:
+    container_name: mongo-loader-container
+    image: quay.io/ukhomeofficedigital/pttg-test-loader-mongodb:0.1.0
+
 
 
 
