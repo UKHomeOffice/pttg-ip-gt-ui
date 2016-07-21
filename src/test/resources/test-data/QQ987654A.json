@@ -1,0 +1,31 @@
+{
+  "individual" : {
+    "title" : "Mr",
+    "forename" : "Harry",
+    "surname" : "Callahan",
+    "nino" : "QQ987654A"
+  },
+  "incomes" : [
+    {
+      "payDate" : "2015-01-04",
+      "employer" : "Flying Pizza Ltd",
+      "income" : "1666.00"
+    },
+    {
+      "payDate" : "2015-02-04",
+      "employer" : "Flying Pizza Ltd",
+      "income" : "1666.00"
+    },
+    {
+      "payDate" : "2015-05-20",
+      "employer" : "Pizza Hut LTD",
+      "income" : "2500.00"
+    },
+    {
+      "payDate" : "2015-06-20",
+      "employer" : "Pizza Hut LTD",
+      "income" : "1666.00"
+    }
+  ],
+  "total": "7498.00 "
+}

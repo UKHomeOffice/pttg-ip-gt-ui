@@ -12,23 +12,17 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.util.UriComponentsBuilder;
 import uk.gov.digital.ho.proving.income.domain.api.APIResponse;
-import uk.gov.digital.ho.proving.income.domain.api.Individual;
 import uk.gov.digital.ho.proving.income.domain.api.IncomeDetail;
+import uk.gov.digital.ho.proving.income.domain.api.Individual;
 
 import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
