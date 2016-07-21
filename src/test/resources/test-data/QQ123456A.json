@@ -1,0 +1,41 @@
+{
+  "individual": {
+    "title": "Mr",
+    "forename": "Harry",
+    "surname": "Callahan",
+    "nino": "QQ123456A"
+  },
+  "incomes": [
+    {
+      "payDate": "2015-01-03",
+      "employer": "Flying Pizza Ltd",
+      "income": "1666.11"
+    },
+    {
+      "payDate": "2015-02-03",
+      "employer": "Flying Pizza Ltd",
+      "income": "1666.11"
+    },
+    {
+      "payDate": "2015-03-05",
+      "employer": "Flying Pizza Ltd",
+      "income": "1666.11"
+    },
+    {
+      "payDate": "2015-04-03",
+      "employer": "Flying Pizza Ltd",
+      "income": "1666.11"
+    },
+    {
+      "payDate": "2015-05-03",
+      "employer": "Flying Pizza Ltd",
+      "income": "1666.11"
+    },
+    {
+      "payDate": "2015-06-03",
+      "employer": "Flying Pizza Ltd",
+      "income": "1666.11"
+    }
+  ],
+  "total": "9996.66"
+}

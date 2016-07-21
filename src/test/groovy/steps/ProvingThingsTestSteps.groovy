@@ -1,6 +1,9 @@
 package steps
 
 import cucumber.api.DataTable
+import cucumber.api.Scenario
+import cucumber.api.java.After
+import cucumber.api.java.Before
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -10,15 +13,46 @@ import org.apache.commons.lang3.text.WordUtils
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.test.IntegrationTest
+import org.springframework.boot.test.SpringApplicationConfiguration
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.web.WebAppConfiguration
+import uk.gov.digital.ho.proving.income.ServiceRunner
 
 import java.text.SimpleDateFormat
 
-
+@SpringApplicationConfiguration(ServiceRunner.class)
+@WebAppConfiguration
+@IntegrationTest
+@ActiveProfiles("test")
 class ProvingThingsTestSteps {
+
+    def incomeUriRegex = "/incomeproving/v1/individual/nino/income"
+
+    //http://localhost:8080/incomeproving/v1/individual/QQ123456A/income?fromDate=2015-01-01&toDate=2015-06-30
+
+    def testDataLoader
+
+    @Value('${wiremock}')
+    private Boolean wiremock;
+
     @Managed
     public WebDriver driver;
 
     private int delay = 500
+
+    @Before
+    def setUp(Scenario scenario) {
+        if (wiremock) {
+            testDataLoader = new WireMockTestDataLoader()
+        }
+    }
+
+    @After
+    def tearDown() {
+        testDataLoader?.stop()
+    }
 
     def String toCamelCase(String s) {
         String allUpper = StringUtils.remove(WordUtils.capitalizeFully(s), " ")
@@ -39,10 +73,19 @@ class ProvingThingsTestSteps {
         }
     }
 
+    @Given("^the account data for (.*)\$")
+    def the_account_data_for(String nino) {
+        testDataLoader.stubTestData(nino, incomeUriRegex.replaceFirst("nino", nino))
+    }
+
+    @Given("^no record for (.*)\$")
+    def no_record_for(String nino) {
+        testDataLoader.stubErrorData("notfound", incomeUriRegex.replaceFirst("nino", nino), 404)
+    }
+
     @Given("^Robert is using the IPS Generic Tool\$")
     public void robert_is_using_the_IPS_Generic_Tool() throws Throwable {
-
-        driver.get("http://localhost:8000");
+        driver.get("http://localhost:8001");
     }
 
     @When("^Robert submits a query:\$")
@@ -108,56 +151,26 @@ class ProvingThingsTestSteps {
     @Then("^The service displays the following message:\$")
     public void the_service_displays_the_following_message(DataTable arg1) {
 
-        if (driver.currentUrl == "http://localhost:8001/income-proving-tool.html") {
-            Map<String, String> entries = arg1.asMap(String.class, String.class)
+        Map<String, String> entries = arg1.asMap(String.class, String.class)
 
-            assert driver.findElement(By.id(entries.get("Error Field"))).getText() == entries.get("Error Message")
-        } else if (driver.currentUrl.startsWith("http://localhost:8000/")) {
-            Map<String, String> entries = arg1.asMap(String.class, String.class)
-
-        } else {
-            assert false
+        entries.each { k, v ->
+            assert driver.findElement(By.id(k)).getText() == v
         }
+
     }
 
     @Then("^The service provides the following Your search results:\$")
     public void the_service_provides_the_following_Your_search_results(DataTable expectedResult) throws Throwable {
 
         Map<String, String> entries = expectedResult.asMap(String.class, String.class)
-        String[] tableKey = entries.keySet()
 
-        WebElement yourSearchIndividualName = driver.findElement(By.id("yourSearchIndividualName"))
-        WebElement yourSearchNationalInsuranceNumber = driver.findElement(By.id("yourSearchNationalInsuranceNumber"))
-        WebElement yourSearchFromDate = driver.findElement(By.id("yourSearchFromDate"))
-        WebElement yourSearchToDate = driver.findElement(By.id("yourSearchToDate"))
+        entries.each{ k, v ->
 
+            def elementText = driver.findElement(By.id(toCamelCase(k))).getText()
+            assert elementText.contains(v)
 
-        for (String s : tableKey) {
-
-            if (s == "Your Search Individual Name") {
-                assert entries.get(s).contains(yourSearchIndividualName.getText())
-                println "Your Search Individual Name: " + yourSearchIndividualName.getText()
-            }
-
-            if (s == "Your Search National Insurance Number") {
-                assert entries.get(s).contains(yourSearchNationalInsuranceNumber.getText())
-                println "Your Search National Insurance Number:  " + yourSearchNationalInsuranceNumber.getText()
-            }
-
-            if (s == "Your Search From Date") {
-                assert entries.get(s).contains(yourSearchFromDate.getText())
-                println "Your Search From Date: " + yourSearchFromDate.getText()
-
-            }
-
-            if (s == "Your Search To Date") {
-                assert entries.get(s).contains(yourSearchToDate.getText())
-                println "Your Search To Date: " + yourSearchToDate.getText()
-
-            }
-
+          //  println "$k: $elementText"
         }
-
     }
 
 
@@ -187,49 +200,16 @@ class ProvingThingsTestSteps {
 
     @Then("^The service provides the following NINO does not exist result:\$")
     public void the_service_provides_the_following_NINO_does_not_exist_result(DataTable expectedResult) {
+
         Map<String, String> entries = expectedResult.asMap(String.class, String.class)
-        String[] tableKey = entries.keySet()
 
-        WebElement pageDynamicHeading = driver.findElement(By.id("pageDynamicHeading"))
-        WebElement pageDynamicSubText = driver.findElement(By.id("pageDynamicSubText"))
+        entries.each { k, v ->
 
-        WebElement yourSearchNationalInsuranceNumber = driver.findElement(By.id("yourSearchNationalInsuranceNumber"))
+            def elementText = driver.findElement(By.id(toCamelCase(k))).getText()
+            assert elementText.contains(v)
 
-        WebElement yourSearchFromDate = driver.findElement(By.id("yourSearchFromDate"))
-        WebElement yourSearchToDate = driver.findElement(By.id("yourSearchToDate"))
-
-        for (String s : tableKey) {
-             driver.sleep(delay)
-            if (s == "Page dynamic heading") {
-                assert entries.get(s).contains(pageDynamicHeading.getText())
-                println "Page Dynamic Heading : " + pageDynamicHeading.getText()
-            }
-
-            if (s == "Page dynamic sub text") {
-
-                assert entries.get(s).contains(pageDynamicSubText.getText())
-                println "Page dynamic sub text: " + pageDynamicSubText.getText()
-            }
-
-            if (s == "Your Search National Insurance Number") {
-                assert entries.get(s).contains(yourSearchNationalInsuranceNumber.getText())
-                println "Your Search National Insurance Number :" + yourSearchNationalInsuranceNumber.getText()
-            }
-
-            if (s == "Your Search From Date") {
-                driver.sleep(delay)
-                assert entries.get(s).contains(yourSearchFromDate.getText())
-                println "Your Search From Date :" + yourSearchFromDate.getText()
-            }
-
-            if (s == "Your Search To Date") {
-                driver.sleep(delay)
-                assert entries.get(s).contains(yourSearchToDate.getText())
-                println "Your Search To Date :" + yourSearchToDate.getText()
-            }
-
+            //  println "$k: $elementText"
         }
-
     }
 
 }
