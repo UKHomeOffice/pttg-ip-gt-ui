@@ -3,12 +3,14 @@ package uk.gov.digital.ho.proving.income.domain.client;
 import uk.gov.digital.ho.proving.income.domain.api.IncomeDetail;
 import uk.gov.digital.ho.proving.income.domain.api.Individual;
 
+import java.util.List;
+
 /**
  * Created by andrewmoores on 10/02/2016.
  */
 public class IncomeResponse {
     private String status;
-    private IncomeDetail[] incomes;
+    private List<IncomeDetail> incomes;
     private String total;
     private Individual individual;
 
@@ -20,11 +22,11 @@ public class IncomeResponse {
         this.status = status;
     }
 
-    public IncomeDetail[] getIncomes() {
+    public List getIncomes() {
         return incomes;
     }
 
-    public void setIncomes(IncomeDetail[] incomes) {
+    public void setIncomes(List incomes) {
         this.incomes = incomes;
     }
 
