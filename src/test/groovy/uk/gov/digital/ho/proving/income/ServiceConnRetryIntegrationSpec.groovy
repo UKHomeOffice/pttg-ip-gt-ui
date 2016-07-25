@@ -1,4 +1,4 @@
-package uk.gov.digital.ho.proving.financial
+package uk.gov.digital.ho.proving.income
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
@@ -9,17 +9,27 @@ import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Timeout
-import uk.gov.digital.ho.proving.income.ServiceRunner
+import steps.WireMockTestDataLoader
 import uk.gov.digital.ho.proving.income.domain.ResponseDetails
-import uk.gov.digital.ho.proving.income.domain.client.IncomeResponse
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*
 import static java.util.concurrent.TimeUnit.SECONDS
 
+/**
+ * @Author Home Office Digital
+ */
 @SpringApplicationConfiguration(classes = ServiceRunner.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-@TestPropertySource(properties = ["api.root=http://10.255.255.1", "rest.connection.connect-timeout=500"])
-class ServiceConnTimeoutIntegrationSpec extends Specification {
+@TestPropertySource(properties = [
+    "api.root=http://localhost:8989",
+    "rest.connection.connection-request-timeout=200",
+    "rest.connection.connect-timeout=200",
+    "rest.connection.read-timeout=200",
+    "connectionRetryDelay=200",
+    "connectionAttemptCount=3"
+])
+class ServiceConnRetryIntegrationSpec extends Specification {
 
     @Value('${local.server.port}')
     def port
@@ -30,23 +40,26 @@ class ServiceConnTimeoutIntegrationSpec extends Specification {
 
     RestTemplate restTemplate
 
+    def apiServerMock
+    def incomeUrlRegex = "/incomeproving/v1/individual/AA121212A/income*"
+
     def setup() {
         restTemplate = new TestRestTemplate()
         url = "http://localhost:" + port + path + params
+
+        apiServerMock = new WireMockTestDataLoader(8989)
     }
 
-    @Timeout(value = 2, unit = SECONDS)
-    def 'obeys timeout on slow connection response'() {
+    @Timeout(value = 4, unit = SECONDS) // ensure it doesn't accidentally run forever...
+    def 'retries API calls when Connection timeout'() {
 
         given:
-        // we have set the api host to an unresolvable address, which means that the rest call to the API won't return
-        // we have also set the connect-timeout property to 1/2 second
+        apiServerMock.withDelayedResponse(incomeUrlRegex, 2)
 
         when:
-        def entity = restTemplate.getForEntity(url, ResponseDetails.class)
+        restTemplate.getForEntity(url, ResponseDetails.class)
 
         then:
-        entity.getBody().message.contains("connect timed out")
-        // If the connection timeout settings aren't being obeyed, then this test will fail when the @Timeout is exceeded
+        verify(3, getRequestedFor(urlPathMatching(incomeUrlRegex)))
     }
 }

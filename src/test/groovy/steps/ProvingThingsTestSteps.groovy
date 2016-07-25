@@ -22,6 +22,9 @@ import uk.gov.digital.ho.proving.income.ServiceRunner
 
 import java.text.SimpleDateFormat
 
+import static java.util.concurrent.TimeUnit.SECONDS
+import static java.util.concurrent.TimeUnit.SECONDS
+
 @SpringApplicationConfiguration(ServiceRunner.class)
 @WebAppConfiguration
 @IntegrationTest
@@ -29,8 +32,7 @@ import java.text.SimpleDateFormat
 class ProvingThingsTestSteps {
 
     def incomeUriRegex = "/incomeproving/v1/individual/nino/income"
-
-    //http://localhost:8080/incomeproving/v1/individual/QQ123456A/income?fromDate=2015-01-01&toDate=2015-06-30
+    def defaultNino = "AA123456A"
 
     def testDataLoader
 
@@ -41,6 +43,7 @@ class ProvingThingsTestSteps {
     public WebDriver driver;
 
     private int delay = 500
+    def defaultTimeout = 2000
 
     @Before
     def setUp(Scenario scenario) {
@@ -88,14 +91,81 @@ class ProvingThingsTestSteps {
         driver.get("http://localhost:8001");
     }
 
+    @Given("^the api response is delayed for (\\d+) seconds\$")
+    public void the_api_response_is_delayed_for_seconds(int delay) throws Throwable {
+        testDataLoader.withDelayedResponse(incomeUriRegex.replaceFirst("nino", defaultNino), delay)
+    }
+
+    @Given("^the api response is garbage\$")
+    public void the_api_response_is_garbage() throws Throwable {
+        testDataLoader.withGarbageResponse(incomeUriRegex.replaceFirst("nino", defaultNino))
+    }
+
+    @Given("^the api response is empty\$")
+    public void the_api_response_is_empty() throws Throwable {
+        testDataLoader.withEmptyResponse(incomeUriRegex.replaceFirst("nino", defaultNino))
+    }
+
+    @Given("^the api response has status (\\d+)\$")
+    public void the_api_response_has_status(int status) throws Throwable {
+        testDataLoader.withResponseStatus(incomeUriRegex.replaceFirst("nino", defaultNino), status)
+    }
+
+    @Given("^the api is unreachable\$")
+    public void the_api_is_unreachable() throws Throwable {
+        testDataLoader.withServiceDown()
+    }
+
+    @Given("^the api response is a validation error - (.*) parameter\$")
+    public void the_api_response_is_a_validation_error(String type) throws Throwable {
+        testDataLoader.stubErrorData("validation-error-$type", incomeUriRegex.replaceFirst("nino", defaultNino), 400)
+    }
+
+    @When("^the income check is performed\$")
+    def the_income_check_is_performed() {
+
+        Map<String, String> validDefaultEntries = [
+                'From date': '01/05/2016',
+                'To date'  : '30/05/2016',
+                'NINO'     : defaultNino
+        ]
+
+        submitEntries(validDefaultEntries)
+    }
+
+    @When("^Robert submits a query to IPS Family TM Case Worker Tool:\$")
+    public void robert_submits_a_query_to_ips_family_tm_case_worker_tool(DataTable arg1) {
+        Map<String, String> entries = arg1.asMap(String.class, String.class)
+
+        String applicationReceivedDate = entries.get("Application received date")
+
+        String[] date = applicationReceivedDate.split("/")
+
+        driver.findElement(By.id("nino")).sendKeys(entries.get("NINO"))
+
+        driver.findElement(By.id("applicationReceivedDateDay")).clear()
+        driver.findElement(By.id("applicationReceivedDateDay")).sendKeys(date[0])
+
+        driver.findElement(By.id("applicationReceivedDateMonth")).clear()
+        driver.findElement(By.id("applicationReceivedDateMonth")).sendKeys(date[1])
+
+        driver.findElement(By.id("applicationReceivedDateYear")).clear()
+        driver.findElement(By.id("applicationReceivedDateYear")).sendKeys(date[2])
+
+        entries.get("NINO") + "_" + applicationReceivedDate.replace('/', '-')
+
+        driver.findElement(By.className("button")).click();
+    }
+
     @When("^Robert submits a query:\$")
     public void robert_submits_a_query(DataTable arg1) {
 
         Map<String, String> entries = arg1.asMap(String.class, String.class)
 
-        println driver.currentUrl
+        submitEntries(entries)
+    }
 
-        List<String, String> entriesList = arg1.asList(String.class)
+    private void submitEntries(Map<String, String> entries) {
 
         entries.each { k, v ->
             String key = toCamelCase(k)
@@ -123,9 +193,16 @@ class ProvingThingsTestSteps {
 
         driver.sleep(delay)
         driver.findElement(By.className("button")).click();
-
     }
 
+    @When("^after at least (\\d+) seconds\$")
+    def after_at_least_x_seconds(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (Exception e) {
+            assert false: 'Sleep interrupted'
+        }
+    }
 
     @Then("^The service provides the following result:\$")
     public void the_service_provides_the_following_results(DataTable expectedResult) {
@@ -161,55 +238,43 @@ class ProvingThingsTestSteps {
 
     @Then("^The service provides the following Your search results:\$")
     public void the_service_provides_the_following_Your_search_results(DataTable expectedResult) throws Throwable {
-
-        Map<String, String> entries = expectedResult.asMap(String.class, String.class)
-
-        entries.each{ k, v ->
-
-            def elementText = driver.findElement(By.id(toCamelCase(k))).getText()
-            assert elementText.contains(v)
-
-          //  println "$k: $elementText"
-        }
+        assertTextFieldEqualityForTable(expectedResult)
     }
 
-
-    @When("^Robert submits a query to IPS Family TM Case Worker Tool:\$")
-    public void robert_submits_a_query_to_ips_family_tm_case_worker_tool(DataTable arg1) {
-        Map<String, String> entries = arg1.asMap(String.class, String.class)
-
-        String applicationReceivedDate = entries.get("Application received date")
-
-        String[] date = applicationReceivedDate.split("/")
-
-        driver.findElement(By.id("nino")).sendKeys(entries.get("NINO"))
-
-        driver.findElement(By.id("applicationReceivedDateDay")).clear()
-        driver.findElement(By.id("applicationReceivedDateDay")).sendKeys(date[0])
-
-        driver.findElement(By.id("applicationReceivedDateMonth")).clear()
-        driver.findElement(By.id("applicationReceivedDateMonth")).sendKeys(date[1])
-
-        driver.findElement(By.id("applicationReceivedDateYear")).clear()
-        driver.findElement(By.id("applicationReceivedDateYear")).sendKeys(date[2])
-
-        entries.get("NINO") + "_" + applicationReceivedDate.replace('/', '-')
-
-        driver.findElement(By.className("button")).click();
+    @Then("^the service displays the following page content\$")
+    public void the_service_displays_the_following_page_content(DataTable expectedResult) throws Throwable {
+        assertTextFieldEqualityForTable(expectedResult)
     }
 
     @Then("^The service provides the following NINO does not exist result:\$")
     public void the_service_provides_the_following_NINO_does_not_exist_result(DataTable expectedResult) {
-
-        Map<String, String> entries = expectedResult.asMap(String.class, String.class)
-
-        entries.each { k, v ->
-
-            def elementText = driver.findElement(By.id(toCamelCase(k))).getText()
-            assert elementText.contains(v)
-
-            //  println "$k: $elementText"
-        }
+        assertTextFieldEqualityForTable(expectedResult)
     }
 
+    @Then("^the service displays the following page content within (\\d+) seconds\$")
+    public void the_service_displays_the_following_page_content_within_seconds(long timeout, DataTable expectedResult) throws Throwable {
+        driver.manage().timeouts().implicitlyWait(timeout, SECONDS)
+        assertTextFieldEqualityForTable(expectedResult)
+        driver.manage().timeouts().implicitlyWait(defaultTimeout, SECONDS)
+    }
+
+    @Then("^the connection attempt count should be (\\d+)\$")
+    def the_connection_attempt_count_should_be_count(int count) {
+        testDataLoader.verifyGetCount(count, incomeUriRegex.replaceFirst("nino", defaultNino))
+    }
+
+    private void assertTextFieldEqualityForTable(DataTable expectedResult) {
+        Map<String, String> entries = expectedResult.asMap(String.class, String.class)
+        assertTextFieldEqualityForMap(entries)
+    }
+
+    private Map<String, String> assertTextFieldEqualityForMap(Map<String, String> entries) {
+
+        entries.each { k, v ->
+            String fieldName = toCamelCase(k);
+            WebElement element = driver.findElement(By.id(fieldName))
+
+            assert element.getText() == v
+        }
+    }
 }

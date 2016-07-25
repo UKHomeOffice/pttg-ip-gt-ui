@@ -6,7 +6,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.web.client.RestTemplate
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 import uk.gov.digital.ho.proving.income.domain.api.APIResponse
@@ -35,7 +34,7 @@ class ServiceSpec extends Specification {
 
     final String API_ENDPOINT = "/incomeproving/v1/individual/{nino}/income"
     final String UI_ENDPOINT = "/incomeproving/v1/individual/{nino}/income"
-    final String NINO = "AA"
+    final String NINO = "AA123456A"
     final String FROM_DATE = "2016-12-12"
     final String TO_DATE = "2016-12-12"
     final String BAD_DATE = "7567/4545"
@@ -62,14 +61,15 @@ class ServiceSpec extends Specification {
 
         RestTemplate restTemplate = new RestTemplate()
         restTemplate.errorHandler = new RestServiceErrorHandler();
-        mockServer = MockRestServiceServer.createServer(restTemplate);
 
+        mockServer = MockRestServiceServer.createServer(restTemplate);
 
         mockMvc = standaloneSetup(service)
                 .setMessageConverters(createMessageConverter())
                 .setControllerAdvice(new ServiceExceptionHandler())
                 .alwaysDo(print())
                 .build()
+
         service.restTemplate = restTemplate
     }
 
@@ -79,14 +79,11 @@ class ServiceSpec extends Specification {
         converter
     }
 
-
     def apiRespondsWith(responseString) {
         mockServer.expect(requestTo(containsString("incomeproving")))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(responseString);
-
     }
-
 
     def "processes valid request and response"() {
 
@@ -136,7 +133,6 @@ class ServiceSpec extends Specification {
         }
     }
 
-
     def "reports errors for missing mandatory parameters"() {
 
         when:
@@ -148,12 +144,13 @@ class ServiceSpec extends Specification {
         then:
         response.with {
             andExpect(status().isBadRequest())
-            andExpect(jsonPath("code", is("0008")))
+            andExpect(jsonPath("code", is("0001")))
             andExpect(jsonPath("message", allOf(
                     containsString("Missing parameter"),
                     containsString("fromDate"))))
         }
     }
+
     def "invalid to date is rejected"() {
 
         when:
@@ -172,8 +169,6 @@ class ServiceSpec extends Specification {
         }
     }
 
-    //TODO add validation to incoming path params
-    @Ignore
     @Unroll
     def "invalid nino of #nino is rejected"() {
 
@@ -190,11 +185,11 @@ class ServiceSpec extends Specification {
             andExpect(jsonPath("code", is("0003")))
             andExpect(jsonPath("message", allOf(
                     containsString("Invalid parameter format"),
-                    containsString("sortCode"))))
+                    containsString("nino"))))
         }
 
         where:
-        nino << ["AD", "0000", "123AAAA4567"]
+        nino << ["AD", "0000", "123AAAA4567", "AA123456E"]
     }
 
     def "reports remote server error from api as internal error"() {
@@ -274,6 +269,4 @@ class ServiceSpec extends Specification {
         response.setIndividual(new Individual(MR, FORENAME, SURNAME, NINO))
         response
     }
-
-
 }

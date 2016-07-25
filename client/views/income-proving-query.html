@@ -1,3 +1,11 @@
+<div class="error-summary" ng-if="vm.serverError !== ''">
+    <h1 class="heading-medium error-summary-heading" id="server-error-summary-heading">
+        Something's gone wrong
+    </h1>
+    <p id="serverError">You can’t use this service just now. The problem will be fixed as soon as possible</p>
+    <p id="serverErrorDetail">Please try again later.</p>
+</div>
+
 <div class="column-full-width">
     <div id="page1" data-bind="visible: currentPage() === 1">
         <h1 class="heading-xlarge" id="pageSubTitle">Individual details</h1>
@@ -10,7 +18,7 @@
         <div class="form-group">
             <form name="vm.queryForm" ng-submit="vm.submit()">
 
-                <div ng-if="vm.validateError || vm.restError" class="error-summary"
+                <div ng-if="vm.validateError" class="error-summary"
                      role="group" aria-labelledby="error-summary-heading-example-2" tabindex="-1">
 
                     <h1 class="heading-medium error-summary-heading" id="error-summary-heading-example-2">

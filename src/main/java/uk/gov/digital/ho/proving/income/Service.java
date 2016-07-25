@@ -8,16 +8,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.gov.digital.ho.proving.income.domain.ResponseDetails;
 import uk.gov.digital.ho.proving.income.domain.api.APIResponse;
+import uk.gov.digital.ho.proving.income.domain.api.Nino;
 import uk.gov.digital.ho.proving.income.domain.client.IncomeResponse;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 
@@ -31,7 +32,6 @@ public class Service {
 
     private static Logger LOGGER = LoggerFactory.getLogger(Service.class);
 
-
     @Value("${api.root}")
     private String apiRoot;
 
@@ -43,18 +43,18 @@ public class Service {
 
     ObjectMapper mapper = new ServiceConfiguration().getMapper();
 
-    //todo confirm we dont need application/json;charset=UTF-8
+    @Retryable(interceptor = "connectionExceptionInterceptor")
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity checkIncome(@PathVariable(value = "nino") String nino,
+    public ResponseEntity checkIncome(@Valid Nino nino,
                                       @RequestParam(value = "fromDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                                       @RequestParam(value = "toDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
 
 
-        LOGGER.debug("CheckIncome: Nino - {} From Date - {} To Date - {}", nino, fromDate, toDate);
+        LOGGER.debug("CheckIncome: Nino - {} From Date - {} To Date - {}", nino.getNino(), fromDate, toDate);
 
-        APIResponse apiResult = restTemplate.exchange(buildUrl(nino, toDate, fromDate), GET, new HttpEntity<>(getHeaders()), APIResponse.class).getBody();
+        APIResponse apiResult = restTemplate.exchange(buildUrl(nino.getNino(), toDate, fromDate), GET, entity(), APIResponse.class).getBody();
 
-        LOGGER.debug(apiResult.toString());
+        LOGGER.debug("Api result: {}", apiResult.toString());
 
         IncomeResponse response = new IncomeResponse();
         response.setIncomes(apiResult.getIncomes());
@@ -65,29 +65,23 @@ public class Service {
     }
 
     private URI buildUrl(String nino, LocalDate toDate, LocalDate fromDate) {
-        return UriComponentsBuilder.fromUriString(apiRoot + apiEndpoint).queryParam("fromDate", fromDate).queryParam("toDate", toDate).buildAndExpand(nino).toUri();
+        return UriComponentsBuilder
+                .fromUriString(apiRoot + apiEndpoint)
+                .queryParam("fromDate", fromDate)
+                .queryParam("toDate", toDate)
+                .buildAndExpand(nino).toUri();
     }
 
-
-    private ResponseEntity<ResponseDetails> buildErrorResponse(HttpHeaders headers, String errorCode, String errorMessage, HttpStatus status) {
-        ResponseDetails response = new ResponseDetails(errorCode, errorMessage);
-        return new ResponseEntity<>(response, headers, status);
-    }
-
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public Object missingParamterHandler(MissingServletRequestParameterException exception) {
-        LOGGER.debug(exception.getMessage());
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-type", "application/json");
-        return buildErrorResponse(headers, "0008", "Missing parameter: " + exception.getParameterName(), HttpStatus.BAD_REQUEST);
+    private HttpEntity<Object> entity() {
+        return new HttpEntity<>(getHeaders());
     }
 
     private HttpHeaders getHeaders() {
 
         HttpHeaders headers = new HttpHeaders();
 
-        headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
-        headers.setAccept(asList(org.springframework.http.MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(asList(MediaType.APPLICATION_JSON));
 
         return headers;
     }
