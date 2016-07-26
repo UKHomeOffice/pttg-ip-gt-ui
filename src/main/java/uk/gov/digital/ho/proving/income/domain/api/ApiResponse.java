@@ -6,12 +6,13 @@ import java.io.Serializable;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class APIResponse implements Serializable {
+public final class ApiResponse implements Serializable {
+
     private Individual individual;
     private List<IncomeDetail> incomes;
     private String total;
 
-    public APIResponse() {
+    public ApiResponse() {
     }
 
     public Individual getIndividual() { return individual;}

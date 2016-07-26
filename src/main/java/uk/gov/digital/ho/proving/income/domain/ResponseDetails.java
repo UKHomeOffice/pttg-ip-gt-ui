@@ -7,7 +7,8 @@ import uk.gov.digital.ho.proving.income.domain.api.ErrorCode;
 
 import java.util.Objects;
 
-public class ResponseDetails {
+public final class ResponseDetails {
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final String message;
 
@@ -22,7 +23,8 @@ public class ResponseDetails {
         this.code = code;
         this.message = message;
     }
-    public ResponseDetails(ErrorCode error){
+
+    public ResponseDetails(ErrorCode error) {
         this.code = error.getCode();
         this.message = error.getMessage();
     }
@@ -57,5 +59,4 @@ public class ResponseDetails {
     public int hashCode() {
         return Objects.hash(code, message);
     }
-
 }

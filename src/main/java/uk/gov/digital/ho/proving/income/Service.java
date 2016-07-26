@@ -14,7 +14,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.gov.digital.ho.proving.income.domain.api.APIResponse;
+import uk.gov.digital.ho.proving.income.domain.api.ApiResponse;
 import uk.gov.digital.ho.proving.income.domain.api.Nino;
 import uk.gov.digital.ho.proving.income.domain.client.IncomeResponse;
 
@@ -52,14 +52,11 @@ public class Service {
 
         LOGGER.debug("CheckIncome: Nino - {} From Date - {} To Date - {}", nino.getNino(), fromDate, toDate);
 
-        APIResponse apiResult = restTemplate.exchange(buildUrl(nino.getNino(), toDate, fromDate), GET, entity(), APIResponse.class).getBody();
+        ApiResponse apiResult = restTemplate.exchange(buildUrl(nino.getNino(), toDate, fromDate), GET, entity(), ApiResponse.class).getBody();
 
         LOGGER.debug("Api result: {}", apiResult.toString());
 
-        IncomeResponse response = new IncomeResponse();
-        response.setIncomes(apiResult.getIncomes());
-        response.setTotal(apiResult.getTotal());
-        response.setIndividual(apiResult.getIndividual());
+        IncomeResponse response = new IncomeResponse(apiResult);
 
         return ResponseEntity.ok(response);
     }

@@ -36,6 +36,7 @@ public class ServiceConfiguration {
 
     @Value("${connectionRetryDelay}")
     private int connectionRetryDelay;
+
     @Autowired
     private RestServiceErrorHandler errorHandler;
 

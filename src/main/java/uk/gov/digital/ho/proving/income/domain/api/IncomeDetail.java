@@ -1,9 +1,10 @@
 package uk.gov.digital.ho.proving.income.domain.api;
 
 /**
- * Created by andrewmoores on 09/02/2016.
+ * @Author Home Office Digital
  */
-public class IncomeDetail {
+public final class IncomeDetail {
+
     public String payDate;
     public String employer;
     public String income;

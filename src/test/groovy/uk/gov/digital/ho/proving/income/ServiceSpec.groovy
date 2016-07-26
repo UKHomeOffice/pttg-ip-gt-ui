@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
-import uk.gov.digital.ho.proving.income.domain.api.APIResponse
+import uk.gov.digital.ho.proving.income.domain.api.ApiResponse
 import uk.gov.digital.ho.proving.income.domain.api.IncomeDetail
 import uk.gov.digital.ho.proving.income.domain.api.Individual
 import uk.gov.digital.ho.proving.income.exception.ServiceExceptionHandler
@@ -256,8 +256,8 @@ class ServiceSpec extends Specification {
         }
     }
 
-    def APIResponse buildResponse(boolean includeIncomes) {
-        APIResponse response = new APIResponse()
+    def ApiResponse buildResponse(boolean includeIncomes) {
+        ApiResponse response = new ApiResponse()
         response.setIncomes([])
         if (includeIncomes) {
             IncomeDetail id1 = new IncomeDetail(PAY_DATE_MONTH1, EMPLOYER_NAME, PAYMENT_AMOUNT)

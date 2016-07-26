@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * @Author Home Office Digital
  */
-public class Nino {
+public final class Nino {
 
     @NotNull(message = "Missing parameter")
     @Pattern(regexp = "^[a-zA-Z]{2}[0-9]{6}[a-dA-D]{1}$", message = "Invalid parameter format")
