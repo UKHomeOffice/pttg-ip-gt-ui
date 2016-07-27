@@ -1,5 +1,6 @@
 package steps
 
+import com.jayway.restassured.response.Response
 import cucumber.api.DataTable
 import cucumber.api.Scenario
 import cucumber.api.java.After
@@ -19,10 +20,10 @@ import org.springframework.boot.test.SpringApplicationConfiguration
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.web.WebAppConfiguration
 import uk.gov.digital.ho.proving.income.ServiceRunner
+import static com.jayway.restassured.RestAssured.given;
 
 import java.text.SimpleDateFormat
 
-import static java.util.concurrent.TimeUnit.SECONDS
 import static java.util.concurrent.TimeUnit.SECONDS
 
 @SpringApplicationConfiguration(ServiceRunner.class)
@@ -31,6 +32,9 @@ import static java.util.concurrent.TimeUnit.SECONDS
 @ActiveProfiles("test")
 class ProvingThingsTestSteps {
 
+    def static rootUrl = "http://localhost:8001/"
+
+    def healthUriRegex = "/health"
     def incomeUriRegex = "/incomeproving/v1/individual/nino/income"
     def defaultNino = "AA123456A"
 
@@ -76,6 +80,30 @@ class ProvingThingsTestSteps {
         }
     }
 
+    private void assertTextFieldEqualityForTable(DataTable expectedResult) {
+        Map<String, String> entries = expectedResult.asMap(String.class, String.class)
+        assertTextFieldEqualityForMap(entries)
+    }
+
+    private Map<String, String> assertTextFieldEqualityForMap(Map<String, String> entries) {
+
+        entries.each { k, v ->
+            String fieldName = toCamelCase(k);
+            WebElement element = driver.findElement(By.id(fieldName))
+
+            assert element.getText() == v
+        }
+    }
+
+
+    def responseStatusFor(String url) {
+        Response response = given()
+                .get(url)
+                .then().extract().response();
+
+        return response.getStatusCode();
+    }
+
     @Given("^the account data for (.*)\$")
     def the_account_data_for(String nino) {
         testDataLoader.stubTestData(nino, incomeUriRegex.replaceFirst("nino", nino))
@@ -88,7 +116,7 @@ class ProvingThingsTestSteps {
 
     @Given("^Robert is using the IPS Generic Tool\$")
     public void robert_is_using_the_IPS_Generic_Tool() throws Throwable {
-        driver.get("http://localhost:8001");
+        driver.get(rootUrl);
     }
 
     @Given("^the api response is delayed for (\\d+) seconds\$")
@@ -109,6 +137,11 @@ class ProvingThingsTestSteps {
     @Given("^the api response has status (\\d+)\$")
     public void the_api_response_has_status(int status) throws Throwable {
         testDataLoader.withResponseStatus(incomeUriRegex.replaceFirst("nino", defaultNino), status)
+    }
+
+    @Given("^the api health check response has status (\\d+)\$")
+    public void the_api_healthcheck_response_has_status(int status) throws Throwable {
+        testDataLoader.withResponseStatus(healthUriRegex, status)
     }
 
     @Given("^the api is unreachable\$")
@@ -276,19 +309,9 @@ class ProvingThingsTestSteps {
         }
     }
 
-
-    private void assertTextFieldEqualityForTable(DataTable expectedResult) {
-        Map<String, String> entries = expectedResult.asMap(String.class, String.class)
-        assertTextFieldEqualityForMap(entries)
-    }
-
-    private Map<String, String> assertTextFieldEqualityForMap(Map<String, String> entries) {
-
-        entries.each { k, v ->
-            String fieldName = toCamelCase(k);
-            WebElement element = driver.findElement(By.id(fieldName))
-
-            assert element.getText() == v
-        }
+    @Then("^the health check response status should be (\\d+)\$")
+    def the_response_status_should_be(int expected) {
+        driver.sleep(700) // Seems to need a delay to let wiremock catch up
+        assert responseStatusFor(rootUrl + "health") == expected
     }
 }
