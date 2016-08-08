@@ -32,9 +32,9 @@ import static java.util.concurrent.TimeUnit.SECONDS
 @ActiveProfiles("test")
 class ProvingThingsTestSteps {
 
-    def static rootUrl = "http://localhost:8001/"
+    def static rootUrl = "http://localhost:8002/"
 
-    def healthUriRegex = "/health"
+    def healthUriRegex = "/healthz"
     def incomeUriRegex = "/incomeproving/v1/individual/nino/income"
     def defaultNino = "AA123456A"
 
@@ -312,6 +312,6 @@ class ProvingThingsTestSteps {
     @Then("^the health check response status should be (\\d+)\$")
     def the_response_status_should_be(int expected) {
         driver.sleep(700) // Seems to need a delay to let wiremock catch up
-        assert responseStatusFor(rootUrl + "health") == expected
+        assert responseStatusFor(rootUrl + "healthz") == expected
     }
 }
