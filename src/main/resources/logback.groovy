@@ -3,7 +3,8 @@ import ch.qos.logback.core.ConsoleAppender
 import ch.qos.logback.core.FileAppender
 import ch.qos.logback.core.status.OnConsoleStatusListener
 
-import static ch.qos.logback.classic.Level.*
+import static ch.qos.logback.classic.Level.DEBUG
+import static ch.qos.logback.classic.Level.INFO
 
 // Add a status listener to record the state of the logback configuration when the logging system is initialised.
 statusListener(OnConsoleStatusListener)
@@ -15,7 +16,7 @@ appender("STDOUT", ConsoleAppender) {
 }
 
 appender("FILE", FileAppender) {
-    file = "pttg-generic-ui.log"
+    file = "pttg-income-proving-ui.log"
     append = true
     encoder(PatternLayoutEncoder) {
         pattern = "%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n"
@@ -29,6 +30,7 @@ appender("FILE", FileAppender) {
 logger("org.eclipse.jetty", INFO)
 logger("org.mongodb.driver.cluster", INFO)
 logger("org.springframework", INFO)
+logger("org.apache.http", INFO)
 
 root(DEBUG, ["STDOUT","FILE"])
 

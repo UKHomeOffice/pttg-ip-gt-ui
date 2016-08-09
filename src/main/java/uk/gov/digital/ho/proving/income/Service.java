@@ -1,34 +1,45 @@
 package uk.gov.digital.ho.proving.income;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.gov.digital.ho.proving.income.domain.ResponseStatus;
-import uk.gov.digital.ho.proving.income.domain.api.APIResponse;
+import uk.gov.digital.ho.proving.income.audit.AuditActions;
+import uk.gov.digital.ho.proving.income.domain.api.ApiResponse;
+import uk.gov.digital.ho.proving.income.domain.api.Nino;
 import uk.gov.digital.ho.proving.income.domain.client.IncomeResponse;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import static java.util.Arrays.asList;
+import static org.springframework.http.HttpMethod.GET;
+import static uk.gov.digital.ho.proving.income.audit.AuditActions.auditEvent;
+import static uk.gov.digital.ho.proving.income.audit.AuditEventType.SEARCH;
+import static uk.gov.digital.ho.proving.income.audit.AuditEventType.SEARCH_RESULT;
 
 @RestController
 @RequestMapping("/incomeproving/v1/individual/{nino}/income")
+@ControllerAdvice
 public class Service {
 
     private static Logger LOGGER = LoggerFactory.getLogger(Service.class);
-
-    private Client client = Client.create();
 
     @Value("${api.root}")
     private String apiRoot;
@@ -36,61 +47,81 @@ public class Service {
     @Value("${api.endpoint}")
     private String apiEndpoint;
 
+    @Autowired
+    private RestTemplate restTemplate;
 
-    //todo confirm we dont need application/json;charset=UTF-8
+    @Autowired
+    private ApplicationEventPublisher auditor;
+
+    @Retryable(interceptor = "connectionExceptionInterceptor")
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity checkIncome(@PathVariable(value = "nino") String nino,
+    public ResponseEntity checkIncome(@Valid Nino nino,
                                       @RequestParam(value = "fromDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                                       @RequestParam(value = "toDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
 
 
-        LOGGER.debug("CheckIncome: Nino - {} From Date - {} To Date - {}", nino, fromDate, toDate);
+        LOGGER.debug("CheckIncome: Nino - {} From Date - {} To Date - {}", nino.getNino(), fromDate, toDate);
 
-        IncomeResponse response = new IncomeResponse();
+        UUID eventId = AuditActions.nextId();
+        auditor.publishEvent(auditEvent(SEARCH, eventId, auditData(nino, fromDate, toDate)));
 
-        client.setConnectTimeout(10000);
+        ApiResponse apiResult = restTemplate.exchange(buildUrl(nino.getNino(), toDate, fromDate), GET, entity(), ApiResponse.class).getBody();
 
-        WebResource webResource = buildUrl(nino, toDate, fromDate);
+        LOGGER.debug("Api result: {}", apiResult.toString());
 
-        ClientResponse clientResponse = webResource.accept("application/json").header("content-type", MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        IncomeResponse response = new IncomeResponse(apiResult);
 
-        APIResponse apiResult = clientResponse.getEntity(APIResponse.class);
+        auditor.publishEvent(auditEvent(SEARCH_RESULT, eventId, auditData(response)));
 
-        LOGGER.debug(apiResult.toString());
-
-        if (clientResponse.getStatusInfo().getStatusCode()==(Response.Status.OK.getStatusCode())) {
-
-            if (apiResult != null) {
-                response.setIncomes(apiResult.getIncomes());
-                response.setTotal(apiResult.getTotal());
-                response.setIndividual(apiResult.getIndividual());
-            }
-        }
-
-        return new ResponseEntity<>(response, HttpStatus.valueOf(clientResponse.getStatus()));
+        return ResponseEntity.ok(response);
     }
 
-    private WebResource buildUrl(String nino, LocalDate toDate, LocalDate fromDate) {
-        final URI expanded = UriComponentsBuilder.fromUriString(apiRoot+apiEndpoint).queryParam("fromDate", fromDate).queryParam("toDate", toDate).buildAndExpand(nino).toUri();
-        LOGGER.debug(expanded.toString());
-        return client.resource(expanded);
+    private URI buildUrl(String nino, LocalDate toDate, LocalDate fromDate) {
+        return UriComponentsBuilder
+                .fromUriString(apiRoot + apiEndpoint)
+                .queryParam("fromDate", fromDate)
+                .queryParam("toDate", toDate)
+                .buildAndExpand(nino).toUri();
     }
 
-
-    private ResponseEntity<ResponseStatus> buildErrorResponse(HttpHeaders headers, String errorCode, String errorMessage, HttpStatus status) {
-        ResponseStatus response = new ResponseStatus(errorCode, errorMessage);
-        return new ResponseEntity<>(response, headers, status);
+    private HttpEntity<Object> entity() {
+        return new HttpEntity<>(getHeaders());
     }
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public Object missingParamterHandler(MissingServletRequestParameterException exception) {
-        LOGGER.debug(exception.getMessage());
+    private HttpHeaders getHeaders() {
+
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-type", "application/json");
-        return buildErrorResponse(headers, "0008", "Missing parameter: " + exception.getParameterName() , HttpStatus.BAD_REQUEST);
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(asList(MediaType.APPLICATION_JSON));
+
+        return headers;
     }
 
-    protected void setClient(Client client) {
-        this.client = client;
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
+
+    private Map<String, Object> auditData(Nino nino, LocalDate fromDate, LocalDate toDate) {
+
+        Map<String, Object> auditData = new HashMap<>();
+
+        auditData.put("method", "check-income");
+        auditData.put("nino", nino.getNino());
+        auditData.put("fromDate", fromDate.format(DateTimeFormatter.ISO_DATE));
+        auditData.put("toDate", toDate.format(DateTimeFormatter.ISO_DATE));
+
+        return auditData;
+    }
+
+    private Map<String, Object> auditData(IncomeResponse response) {
+
+        Map<String, Object> auditData = new HashMap<>();
+
+        auditData.put("method", "check-income");
+        auditData.put("response", response);
+
+        return auditData;
+    }
+
 }

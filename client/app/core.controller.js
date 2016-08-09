@@ -5,9 +5,9 @@
         .module('app.core')
         .controller('coreController', coreController);
 
-    coreController.$inject = ['$rootScope','$location','restService','$anchorScroll'];
+    coreController.$inject = ['$rootScope','$location','restService','$anchorScroll', '$log'];
     /* @ngInject */
-    function coreController($rootScope, $location, restService, $anchorScroll) {
+    function coreController($rootScope, $location, restService, $anchorScroll, $log) {
         var vm = this;
 
         var NINO_REGEX = /^[a-zA-Z]{2}[0-9]{6}[a-dA-D]{1}$/;
@@ -16,31 +16,7 @@
         var DATE_VALIDATE_FORMAT = 'YYYY-M-D';
         var INVALID_NINO_NUMBER = '0001';
 
-        /* has it*/
-
-        vm.model = {
-            nino: '',
-            fromDateDay: '',
-            fromDateMonth: '',
-            fromDateYear: '',
-            toDateDay: '',
-            toDateMonth: '',
-            toDateYear: '',
-
-            total: '',
-            applicant: ''
-        };
-
-        vm.validateError = false;
-        vm.fromDateInvalidError = false;
-        vm.fromDateMissingError = false;
-        vm.toDateInvalidError = false;
-        vm.toDateMissingError = false;
-
-        vm.ninoMissingError = false;
-        vm.ninoInvalidError = false;
-        vm.ninoNotFoundError = false;
-        vm.serverError = '';
+        initialise();
 
         vm.formatMoney = function(moneyToFormat) {
             return accounting.formatMoney(moneyToFormat, { symbol: CURRENCY_SYMBOL, precision: 2});
@@ -86,13 +62,12 @@
                         vm.model.total = data.total;
                         $location.path('/income-proving-result');
                     }).catch(function(error) {
-                        if (error.status === 400 && error.data.error.code === INVALID_NINO_NUMBER){
-                            vm.ninoInvalidError = true;
-                            vm.restError = true;
-                        } else if (error.status === 404) {
+                        $log.debug("received a non success result: " + error.status + " : " + error.statusText)
+                        if (error.status === 404) {
                             $location.path('/income-proving-no-records');
                         } else {
                             vm.serverError = 'Unable to process your request, please try again.';
+                            vm.serverErrorDetail = error.data.message;
                         }
                    });
              } else {
@@ -101,19 +76,51 @@
         };
 
         vm.newSearch = function() {
+            initialise()
             $location.path('/income-proving-query');
         };
+
+        function initialise() {
+            vm.model = {
+                nino: '',
+                fromDateDay: '',
+                fromDateMonth: '',
+                fromDateYear: '',
+                toDateDay: '',
+                toDateMonth: '',
+                toDateYear: '',
+
+                total: '',
+                applicant: ''
+            };
+
+            vm.validateError = false;
+            vm.fromDateInvalidError = false;
+            vm.fromDateMissingError = false;
+            vm.toDateInvalidError = false;
+            vm.toDateMissingError = false;
+
+            vm.ninoMissingError = false;
+            vm.ninoInvalidError = false;
+            vm.ninoNotFoundError = false;
+
+            vm.serverError = '';
+            vm.serverErrorDetail = '';
+        }
 
         function clearErrors() {
             vm.ninoNotFoundError = false;
             vm.ninoInvalidError = false;
-            vm.restError = false;
             vm.ninoMissingError = false;
+
             vm.fromDateMissingError = false;
             vm.fromDateInvalidError = false;
+
             vm.toDateMissingError = false;
             vm.toDateInvalidError = false;
+
             vm.serverError = '';
+            vm.serverErrorDetail = '';
             vm.validateError = false;
         }
 

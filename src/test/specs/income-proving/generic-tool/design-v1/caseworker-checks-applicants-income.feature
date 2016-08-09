@@ -4,9 +4,9 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
 
   “How much income has the applicant or spouse earned within a given period?"
 
-#@ Changed scenario, added Your search box
   Scenario: Robert obtains NINO income details to understand how much they have earned within 6 months (single job)
     Given Robert is using the IPS Generic Tool
+    Given the account data for QQ123456A
     When Robert submits a query:
       | NINO      | QQ123456A  |
       | From Date | 01/01/2015 |
@@ -25,9 +25,9 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
       | Your Search From Date                 | 01/01/2015     |
       | Your Search To Date                   | 30/06/2015     |
 
-#@ Changed scenario, added Your search box
   Scenario: Robert obtains NINO income details to understand how much they have earned within 12 months (multiple jobs over year period)
     Given Robert is using the IPS Generic Tool
+    Given the account data for QQ654321A
     When Robert submits a query:
       | NINO      | QQ654321A  |
       | From Date | 01/01/2015 |
@@ -52,9 +52,9 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
       | Your Search From Date                 | 01/01/2015     |
       | Your Search To Date                   | 31/12/2015     |
 
-#@ Changed scenario, added Your search box
   Scenario: Robert obtains NINO income details to understand how much they have earned within 6 months (multiple jobs per month)
     Given Robert is using the IPS Generic Tool
+    Given the account data for QQ023987A
     When Robert submits a query:
       | NINO      | QQ023987A  |
       | From Date | 01/01/2015 |
@@ -78,9 +78,9 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
       | Your Search From Date                 | 01/01/2015     |
       | Your Search To Date                   | 30/06/2015     |
 
-#@ Changed scenario, added Your search box
   Scenario: Robert obtains NINO income details to understand how much he has earned within 6 months
     Given Robert is using the IPS Generic Tool
+    Given the account data for QQ987654A
     When Robert submits a query:
       | NINO      | QQ987654A  |
       | From Date | 01/01/2015 |
@@ -97,9 +97,9 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
       | Your Search From Date                 | 01/01/2015     |
       | Your Search To Date                   | 30/06/2015     |
 
-#@ Changed scenario, added Your search box
   Scenario: Robert obtains NINO income details to understand how much he has earned within 12 months
     Given Robert is using the IPS Generic Tool
+    Given the account data for QQ765432A
     When Robert submits a query:
       | NINO      | QQ765432A  |
       | From Date | 01/02/2015 |
