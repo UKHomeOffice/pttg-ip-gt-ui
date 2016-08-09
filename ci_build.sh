@@ -81,7 +81,7 @@ main() {
   build_image_that_runs_app
 
   echo "=== dockerPublish function - temp disabled"
-  #publish
+  publish
 }
 
 main "$@"
