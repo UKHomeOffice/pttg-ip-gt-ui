@@ -14,7 +14,7 @@ public class ServiceRunner {
 
     //@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        System.setProperty("javax.net.ssl.trustStore", "/data/truststore.jks");
+        //System.setProperty("javax.net.ssl.trustStore", "/data/truststore.jks");
         return application.sources(ServiceRunner.class);
     }
 
