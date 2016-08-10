@@ -26,7 +26,7 @@ build_app() {
   ENV_OPTS="GIT_COMMIT=${GIT_COMMIT} -e VERSION=${VERSION}"
   [ -n "${BUILD_NUMBER}" ] && ENV_OPTS="BUILD_NUMBER=${BUILD_NUMBER} -e ${ENV_OPTS}"
 
-  docker run -e ${ENV_OPTS} -v ${MOUNT} -m 1G "${GRADLE_IMAGE}" "${@}"
+  docker run -e ${ENV_OPTS} -v ${MOUNT} "${GRADLE_IMAGE}" "${@}"
 }
 
 set_props() {
