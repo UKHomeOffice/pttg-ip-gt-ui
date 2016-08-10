@@ -32,7 +32,7 @@ import static java.util.concurrent.TimeUnit.SECONDS
 @ActiveProfiles("test")
 class ProvingThingsTestSteps {
 
-    def static rootUrl = "http://localhost:8002/"
+    def static rootUrl = "http://localhost:8000/"
 
     def healthUriRegex = "/healthz"
     def incomeUriRegex = "/incomeproving/v1/individual/nino/income"
