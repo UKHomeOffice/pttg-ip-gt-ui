@@ -16,4 +16,4 @@ WORKDIR /code
 RUN npm install && node_modules/bower/bin/bower install --allow-root
 RUN npm install gulp
 
-ENTRYPOINT ["gradle"]
+ENTRYPOINT ["gradle", "--debug"]
