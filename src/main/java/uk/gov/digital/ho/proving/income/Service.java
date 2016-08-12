@@ -77,11 +77,15 @@ public class Service {
     }
 
     private URI buildUrl(String nino, LocalDate toDate, LocalDate fromDate) {
-        return UriComponentsBuilder
+        URI uri = UriComponentsBuilder
                 .fromUriString(apiRoot + apiEndpoint)
                 .queryParam("fromDate", fromDate)
                 .queryParam("toDate", toDate)
                 .buildAndExpand(nino).toUri();
+
+        LOGGER.debug("Constructed URI: {}", uri.toString());
+
+        return uri;
     }
 
     private HttpEntity<Object> entity() {

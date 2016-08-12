@@ -1,9 +1,12 @@
 package uk.gov.digital.ho.proving.income.health;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
+import uk.gov.digital.ho.proving.income.Service;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,6 +16,8 @@ import java.net.URL;
  */
 @Component
 public class ApiConnectionHealth implements HealthIndicator {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(ApiConnectionHealth.class);
 
     @Value("${api.root}")
     private String apiRoot;
@@ -38,6 +43,8 @@ public class ApiConnectionHealth implements HealthIndicator {
     public static class UrlConnectionTester {
 
         public int getResponseCodeFor(String uri){
+
+            LOGGER.debug("Healthcheck calling API URI: {}", uri.toString());
 
             try {
                 URL url = new URL(uri);
