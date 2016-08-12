@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
-import uk.gov.digital.ho.proving.income.Service;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
