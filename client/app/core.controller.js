@@ -22,17 +22,19 @@
             return accounting.formatMoney(moneyToFormat, { symbol: CURRENCY_SYMBOL, precision: 2});
         };
 
+        vm.getFullDate = function (d, m, y) {
+            var month = m.length > 1 ? m : '0' + m;
+            var day = d.length > 1 ? d : '0' + d
+            var result = y + '-' + month + '-' + day;
+            return result;
+        };
+
         vm.getFullFromDate = function() {
-                var month = vm.model.fromDateMonth > 9 ? vm.model.fromDateMonth : '0' + vm.model.fromDateMonth;
-                var day = vm.model.fromDateDay > 9 ? vm.model.fromDateDay : '0' + vm.model.fromDateDay
-                return vm.model.fromDateYear+'-'+month+'-'+day;
-            return vm.model.fromDateYear+'-'+vm.model.fromDateMonth+'-'+vm.model.fromDateDay;
+            return vm.getFullDate(vm.model.fromDateDay, vm.model.fromDateMonth, vm.model.fromDateYear);
         };
 
         vm.getFullToDate = function() {
-                    var month = vm.model.toDateMonth > 9 ? vm.model.toDateMonth : '0' + vm.model.toDateMonth;
-                    var day = vm.model.toDateDay > 9 ? vm.model.toDateDay : '0' + vm.model.toDateDay
-                    return vm.model.toDateYear+'-'+month+'-'+day;
+            return vm.getFullDate(vm.model.toDateDay, vm.model.toDateMonth, vm.model.toDateYear);
         };
 
         vm.formatToDate = function() {

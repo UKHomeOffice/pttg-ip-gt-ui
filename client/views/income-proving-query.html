@@ -43,7 +43,7 @@
                             <a href="" ng-click="vm.scrollTo('fromDateDay')">The from date is invalid</a></li>
                         <li ng-if="vm.toDateMissingError">
                             <a href="" ng-click="vm.scrollTo('toDateDay')">The to date is invalid</a></li>
-                        <li ng-if="vm.toDateateInvalidError">
+                        <li ng-if="vm.toDateInvalidError">
                             <a href="" ng-click="vm.scrollTo('toDateDay')">The to date is invalid</a></li>
                     </ul>
                 </div>
@@ -77,21 +77,21 @@
                                     Enter a valid from date</span>
                             <div class="form-group form-group-day">
                                 <label for="fromDateDay">Day</label>
-                                <input class="form-control" name="fromDateDay" id="fromDateDay" type="number"
-                                       pattern="[0-9]*" ng-model="vm.model.fromDateDay" autocomplete="off">
+                                <input class="form-control" name="fromDateDay" id="fromDateDay" type="text"
+                                        ng-model="vm.model.fromDateDay" autocomplete="off">
                             </div>
 
                             <div class="form-group form-group-month">
                                 <label for="fromDateMonth">Month</label>
                                 <input class="form-control" name="fromDateMonth" id="fromDateMonth"
-                                       type="number" pattern="[0-9]*" ng-model="vm.model.fromDateMonth"
+                                       type="text" ng-model="vm.model.fromDateMonth"
                                        autocomplete="off">
                             </div>
 
                             <div class="form-group form-group-year">
                                 <label for="fromDateYear">Year</label>
-                                <input class="form-control" name="fromDateYear" id="fromDateYear" type="number"
-                                       pattern="[0-9]*" ng-model="vm.model.fromDateYear" autocomplete="off">
+                                <input class="form-control" name="fromDateYear" id="fromDateYear" type="text"
+                                        ng-model="vm.model.fromDateYear" autocomplete="off">
                             </div>
                         </div>
 
@@ -109,21 +109,21 @@
                                     Enter a valid to date</span>
                             <div class="form-group form-group-day">
                                 <label for="toDateDay">Day</label>
-                                <input class="form-control" name="toDateDay" id="toDateDay" type="number"
-                                       pattern="[0-9]*" ng-model="vm.model.toDateDay" autocomplete="off">
+                                <input class="form-control" name="toDateDay" id="toDateDay" type="text"
+                                       ng-model="vm.model.toDateDay" autocomplete="off">
                             </div>
 
                             <div class="form-group form-group-month">
                                 <label for="toDateMonth">Month</label>
                                 <input class="form-control" name="toDateMonth" id="toDateMonth"
-                                       type="number" pattern="[0-9]*" ng-model="vm.model.toDateMonth"
+                                       type="text" ng-model="vm.model.toDateMonth"
                                        autocomplete="off">
                             </div>
 
                             <div class="form-group form-group-year">
                                 <label for="toDateYear">Year</label>
-                                <input class="form-control" name="toDateYear" id="toDateYear" type="number"
-                                       pattern="[0-9]*" ng-model="vm.model.toDateYear" autocomplete="off">
+                                <input class="form-control" name="toDateYear" id="toDateYear" type="text"
+                                       ng-model="vm.model.toDateYear" autocomplete="off">
                             </div>
                         </div>
 
