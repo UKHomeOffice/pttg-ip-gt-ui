@@ -37,11 +37,11 @@ set_props() {
 
 build_image_that_runs_app() {
   docker build --build-arg VERSION=${VERSION} --build-arg JAR_PATH=build/libs \
-    -t quay.io/ukhomeofficedigital/pttg-income-proving-ui:${VERSION} .
+    -t quay.io/ukhomeofficedigital/pttg-ip-ui:${VERSION} .
 }
 
 publish() {
-  docker push quay.io/ukhomeofficedigital/pttg-income-proving-ui:${VERSION}
+  docker push quay.io/ukhomeofficedigital/pttg-ip-ui:${VERSION}
 }
 
 docker_credentials() {
