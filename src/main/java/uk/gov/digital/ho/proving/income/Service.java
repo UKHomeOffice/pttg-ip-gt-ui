@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static java.util.Arrays.asList;
+import static net.logstash.logback.argument.StructuredArguments.value;
 import static org.springframework.http.HttpMethod.GET;
 import static uk.gov.digital.ho.proving.income.audit.AuditActions.auditEvent;
 import static uk.gov.digital.ho.proving.income.audit.AuditEventType.SEARCH;
@@ -58,15 +59,14 @@ public class Service {
                                       @RequestParam(value = "fromDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                                       @RequestParam(value = "toDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
 
-
-        LOGGER.debug("CheckIncome: Nino - {} From Date - {} To Date - {}", nino.getNino(), fromDate, toDate);
+        LOGGER.debug("CheckIncome: Nino - {} From Date - {} To Date - {}", value("nino", nino.getNino()), fromDate, toDate);
 
         UUID eventId = AuditActions.nextId();
         auditor.publishEvent(auditEvent(SEARCH, eventId, auditData(nino, fromDate, toDate)));
 
         ApiResponse apiResult = restTemplate.exchange(buildUrl(nino.getNino(), toDate, fromDate), GET, entity(), ApiResponse.class).getBody();
 
-        LOGGER.debug("Api result: {}", apiResult.toString());
+        LOGGER.debug("Api result: {}", value("checkIncomeApiResult", apiResult.toString()));
 
         IncomeResponse response = new IncomeResponse(apiResult);
 

@@ -16,7 +16,10 @@ import org.springframework.retry.interceptor.RetryInterceptorBuilder;
 import org.springframework.retry.interceptor.RetryOperationsInterceptor;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import uk.gov.digital.ho.proving.income.integration.RestServiceErrorHandler;
+import uk.gov.digital.ho.proving.income.logging.LoggingInterceptor;
 
 import java.io.InterruptedIOException;
 import java.net.ConnectException;
@@ -29,7 +32,7 @@ import java.util.HashMap;
 @Configuration
 @EnableRetry
 @ComponentScan("uk.gov.digital.ho.proving.income")
-public class ServiceConfiguration {
+public class ServiceConfiguration extends WebMvcConfigurerAdapter {
 
     @Value("${connectionAttemptCount}")
     private int connectionAttemptCount;
@@ -82,5 +85,10 @@ public class ServiceConfiguration {
                 .retryPolicy(retry)
                 .backOffPolicy(backOff)
                 .build();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoggingInterceptor());
     }
 }
