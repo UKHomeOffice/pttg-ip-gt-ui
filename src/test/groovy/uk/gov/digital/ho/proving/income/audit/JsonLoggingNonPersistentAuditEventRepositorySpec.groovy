@@ -33,21 +33,22 @@ class JsonLoggingNonPersistentAuditEventRepositorySpec extends Specification {
         repo.find("principal", event.getTimestamp().minus(1)).isEmpty()
     }
 
-    def 'sends audit events to logger'(){
+    def 'sends audit events to logger'() {
+
+        def logEntry
 
         given:
-        AuditEvent event = new AuditEvent("audit-type", "audit-data=test")
+        AuditEvent event = new AuditEvent("principal", "audit-type", "audit-data=test")
 
         when:
         repo.add(event)
 
         then:
-        1 * logAppender.doAppend(_) >> { arg ->
 
-            arg[0].level == Level.INFO
-            arg[0].formattedMessage.contains("\"type\" : \"audit-type\"")
-            arg[0].formattedMessage.contains("\"audit-data\" : \"test\"")
-        }
+        1 * logAppender.doAppend(_) >> { arg -> logEntry = arg[0] }
 
+        logEntry.level == Level.INFO
+        logEntry.formattedMessage.contains("type=audit-type")
+        logEntry.formattedMessage.contains("audit-data=test")
     }
 }
