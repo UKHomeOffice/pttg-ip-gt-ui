@@ -3,7 +3,7 @@ FROM quay.io/ukhomeofficedigital/openjdk8:v1.0.0
 ENV PTTG_API_ENDPOINT localhost
 ENV USER pttg
 ENV GROUP pttg
-ENV NAME pttg-income-proving-ui
+ENV NAME pttg-ip-gt-ui
 
 ARG JAR_PATH
 ARG VERSION
