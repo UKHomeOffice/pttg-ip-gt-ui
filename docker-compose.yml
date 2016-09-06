@@ -2,7 +2,7 @@ version: '2'
 services:
   pttg-generic-ui:
     container_name: income-ui-container
-    image: quay.io/ukhomeofficedigital/pttg-income-proving-ui:v0.1.0-23.84ef12d
+    image: quay.io/ukhomeofficedigital/pttg-ip-gt-ui:v0.1.0-23.84ef12d
     ports:
      - "8000:8080"
     links:

@@ -15,7 +15,7 @@ import net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder
 import static ch.qos.logback.classic.Level.DEBUG
 import static ch.qos.logback.classic.Level.INFO
 
-def appName = "pttg-income-proving-ui"
+def appName = "pttg-ip-gt-ui"
 def version = '0.1.0'
 
 // Add a status listener to record the state of the logback configuration when the logging system is initialised.
