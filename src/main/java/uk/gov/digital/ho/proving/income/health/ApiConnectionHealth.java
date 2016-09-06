@@ -31,6 +31,8 @@ public class ApiConnectionHealth implements HealthIndicator {
 
         int responseCode = tester.getResponseCodeFor(apiRoot + apiEndpoint);
 
+        LOGGER.debug("Healthcheck response was: {}", responseCode);
+
         if (responseCode != 200) {
             return Health.down().withDetail("While trying to read income proving service, received:", responseCode).build();
         }
@@ -55,6 +57,8 @@ public class ApiConnectionHealth implements HealthIndicator {
                 return connection.getResponseCode();
 
             } catch (Exception e) {
+
+                LOGGER.warn("Healthcheck failed with exception: {}", e.getMessage(), e);
                 return 0;
             }
         }
