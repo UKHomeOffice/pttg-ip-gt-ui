@@ -19,7 +19,7 @@ public class ServiceRunner {
     }
 
     public static void main(String[] args) throws Exception {
-        LOGGER.debug("starting pttg-generic-ui");
+        LOGGER.debug("starting pttg-ip-gt-ui");
 
         run(ServiceRunner.class, args);
     }

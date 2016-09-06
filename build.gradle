@@ -35,7 +35,7 @@ if (System.getenv('VERSION')) {
 
 
 jar {
-    baseName = 'pttg-income-proving-ui'
+    baseName = 'pttg-ip-gt-ui'
     if (System.getenv('BUILD_NUMBER')) {
       version =  version + '-' + System.getenv('BUILD_NUMBER')
     }
