@@ -66,7 +66,7 @@ public class Service {
 
         ApiResponse apiResult = restTemplate.exchange(buildUrl(nino.getNino(), toDate, fromDate), GET, entity(), ApiResponse.class).getBody();
 
-        LOGGER.debug("Api result: {}", value("checkIncomeApiResult", apiResult.toString()));
+        LOGGER.debug("Api result: {}", value("checkIncomeApiResult", apiResult));
 
         IncomeResponse response = new IncomeResponse(apiResult);
 
