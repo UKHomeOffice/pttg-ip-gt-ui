@@ -115,3 +115,19 @@ processResources {
 clean.doFirst{
     delete 'pttg-income-proving-ui.log'
 }
+
+tasks.withType(JavaCompile) {
+
+    options.fork = true  // Fork your compilation into a child process
+    options.forkOptions.setMemoryMaximumSize("256m")
+}
+
+tasks.withType(GroovyCompile) {
+
+    options.fork = true  // Fork your compilation into a child process
+    options.forkOptions.setMemoryMaximumSize("256m")
+}
+
+test {
+    maxHeapSize = "256m"
+}
