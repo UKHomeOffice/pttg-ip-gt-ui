@@ -240,16 +240,20 @@ class ProvingThingsTestSteps {
     @Then("^The service provides the following result:\$")
     public void the_service_provides_the_following_results(DataTable expectedResult) {
         String amount
+        println 'the_service_provides_the_following_results'
         for (int i = 1; i < expectedResult.raw().size() + 1; i++) {
             String row = expectedResult.raw.get(i - 1)
 
             String[] column_data = row.split(",")
 
-            def dateXpath = '//*[@id="page2"]/table[2]/tbody[' + i + ']/tr/td[1]'
-            assert column_data[0].contains(driver.findElement(By.xpath(dateXpath)).getText())
-            println "dateXpath: " + driver.findElement(By.xpath(dateXpath)).getText()
+            println i
 
-            def amountXpath = '//*[@id="page2"]/table[2]/tbody[' + i + ']/tr/td[3]'
+            def dateXpath = '//*[@id="results"]/tbody/tr[' + (i + 1) + ']/td[1]'
+            String dateText = driver.findElement(By.xpath(dateXpath)).getText()
+            println dateText
+            assert column_data[0].contains(dateText)
+
+            def amountXpath = '//*[@id="results"]/tbody/tr[' + (i + 1) + ']/td[3]'
 
             amount = column_data[2] + "," + column_data[3]
             println "Amount --------->" + amount

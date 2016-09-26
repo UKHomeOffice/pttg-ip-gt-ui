@@ -1,0 +1,22 @@
+<div class="column-full-width ng-scope">
+  <div id="page1">
+    <h1 class="heading-large" id="pageTitle" tabindex="-1">
+      <span class="heading-secondary">Financial requirement check</span>
+      <span id="pageSubTitle">Individual details</span>
+    </h1>
+
+    <div class="text">
+      <p class="lede" id="pageSubText">Use this tool to query HMRC. It will provide the income of a person using their National Insurance Number.</p>
+    </div>
+
+    <hod-form name="details" submit="detailsSubmit">
+      <hod-text name="nino" label="National Insurance Number" hint="For example, 'QQ 12 34 56 C'." field="details.nino" config="conf.nino"></hod-text>
+
+      <hod-date name="fromDate" label="From date" field="details.fromDate" hint="For example, 31 3 1980" config="conf.fromDate"></hod-date>
+
+      <hod-date name="toDate" label="To date" field="details.toDate" hint="For example, 31 3 1980" config="conf.toDate"></hod-date>
+
+      <hod-submit value="Check eligibility"></hod-submit>
+    </hod-form>
+  </div>
+</div>

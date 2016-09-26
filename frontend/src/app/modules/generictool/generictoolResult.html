@@ -1,0 +1,64 @@
+<div id="page2" class="ng-scope">
+
+  <div ng-if="haveResult">
+    <h1 class="heading-large" id="pageTitle" tabindex="-1">
+      <span class="heading-secondary">Financial requirement check</span>
+      <span id="pageSubHeading">Individual income</span>
+    </h1>
+  </div>
+
+  <div ng-if="!haveResult">
+    <h1 class="form-title heading-large"><span id="pageDynamicHeading">{{ heading }}</span></h1>
+    <p class="lede ng-scope"><span id="pageDynamicDetail">{{ reason }}</span></p>
+  </div>
+
+
+  <h2 class="heading-medium ng-scope">Your search</h2>
+  <table>
+    <tr>
+      <th scope="col" ng-if="haveResult">Individual</th>
+      <th scope="col">National Insurance Number</th>
+      <th scope="col">From date</th>
+      <th scope="col">To date</th>
+    </tr>
+
+    <tr>
+      <td ng-if="haveResult"><span id="yourSearchIndividualName">{{ individual.forename}} {{ individual.surname }}</span></td>
+      <td><span id="yourSearchNationalInsuranceNumber">{{ details.nino }}</span></td>
+      <td><span id="yourSearchFromDate">{{ details.displayFromDate }}</span></td>
+      <td><span id="yourSearchToDate">{{ details.displayToDate }}</span></td>
+    </tr>
+  </table>
+
+  <div ng-if="haveResult">
+    <h2 class="heading-medium">Income details</h2>
+    <table id="results">
+      <tr>
+        <th scope="col">Payment date</th>
+        <th scope="col">Employer</th>
+        <th scope="col">Gross income</th>
+      </tr>
+      <tr ng-repeat="inc in incomes">
+        <td>{{ inc.payDate }}</td>
+        <td>{{ inc.employer }}</td>
+        <td>{{ inc.income }}</td>
+      </tr>
+      <tr>
+        <td>
+          <span style="font-weight: bold">Total:</span>
+        </td>
+        <td></td>
+        <td>
+          <span style="font-weight: bold">{{ total }}</span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <br />
+  <br />
+
+  <div class="form-group">
+      <input type="submit" class="button" value="Start a new search" ng-click="newSearch()">
+  </div>
+
+</div>

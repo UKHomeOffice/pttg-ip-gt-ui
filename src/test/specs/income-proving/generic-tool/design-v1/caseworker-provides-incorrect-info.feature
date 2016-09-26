@@ -80,7 +80,7 @@ Feature: Input validation
       | From Date | 34/01/2015 |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | application—raised-date-error | Enter a valid from date |
+      | fromDate-error | Enter a valid from date |
 
   Scenario: Caseworker enters an incorrect To Date (Day)
     When Robert submits a query:
@@ -88,7 +88,7 @@ Feature: Input validation
       | From Date | 34/01/2015 |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | application—raised-date-error | Enter a valid from date |
+      | fromDate-error | Enter a valid from date |
 
   Scenario: Caseworker enters an incorrect From Date (Month)
     When Robert submits a query:
@@ -96,7 +96,7 @@ Feature: Input validation
       | From Date | 01/13/2015 |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | application—raised-date-error | Enter a valid from date |
+      | fromDate-error | Enter a valid from date |
 
   Scenario: Caseworker enters an incorrect To Date (Month)
     When Robert submits a query:
@@ -104,7 +104,7 @@ Feature: Input validation
       | From Date | 01/13/2015 |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | application—raised-date-error | Enter a valid from date |
+      | fromDate-error | Enter a valid from date |
 
   Scenario: Caseworker enters an incorrect From Date (Year)
     When Robert submits a query:
@@ -112,7 +112,7 @@ Feature: Input validation
       | From Date | 34/01/201D |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | application—raised-date-error | Enter a valid from date |
+      | fromDate-error | Enter a valid from date |
 
   Scenario: Caseworker enters an incorrect To Date (Year)
     When Robert submits a query:
@@ -120,7 +120,7 @@ Feature: Input validation
       | From Date | 01/01/2015 |
       | To Date   | 01/07/201E |
     Then The service displays the following message:
-      | application—raised-date-error | Enter a valid to date |
+      | toDate-error | Enter a valid to date |
 
   Scenario: Caseworker enters a blank From Date
     When Robert submits a query:
@@ -128,7 +128,7 @@ Feature: Input validation
       | From Date |            |
       | To Date   | 01/07/2015 |
     Then The service displays the following message:
-      | application—raised-date-error | Enter a valid from date |
+      | fromDate-error | Enter a valid from date |
 
   Scenario: Caseworker enters a blank To Date
     When Robert submits a query:
@@ -136,4 +136,4 @@ Feature: Input validation
       | From Date | 01/01/2015 |
       | To Date   |            |
     Then The service displays the following message:
-      | application—raised-date-error | Enter a valid to date |
+      | toDate-error | Enter a valid to date |
