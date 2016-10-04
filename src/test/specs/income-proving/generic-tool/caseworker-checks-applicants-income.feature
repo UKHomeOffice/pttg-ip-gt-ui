@@ -123,3 +123,27 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
       | Your Search National Insurance Number | QQ765432A      |
       | Your Search From Date                 | 01/02/2015     |
       | Your Search To Date                   | 31/01/2016     |
+
+
+  Scenario: Robert obtains NINO income details and clicks on the Start a new search button
+    Given Robert is using the IPS Generic Tool
+    Given the account data for QQ123456A
+    When Robert submits a query:
+      | NINO      | QQ123456A  |
+      | From Date | 01/01/2015 |
+      | To Date   | 30/06/2015 |
+    Then The service provides the following result:
+      | 03/01/2015 | Flying Pizza Ltd | £1,666.11 |
+      | 03/02/2015 | Flying Pizza Ltd | £1,666.11 |
+      | 05/03/2015 | Flying Pizza Ltd | £1,666.11 |
+      | 03/04/2015 | Flying Pizza Ltd | £1,666.11 |
+      | 03/05/2015 | Flying Pizza Ltd | £1,666.11 |
+      | 03/06/2015 | Flying Pizza Ltd | £1,666.11 |
+      | Total:     |                  | £9,996.66 |
+    And The service provides the following Your search results:
+      | Your Search Individual Name           | Harry Callahan |
+      | Your Search National Insurance Number | QQ123456A      |
+      | Your Search From Date                 | 01/01/2015     |
+      | Your Search To Date                   | 30/06/2015     |
+    And The service returns to the input page on clicking of the Start a new search button
+      | Page sub title | Individual details |

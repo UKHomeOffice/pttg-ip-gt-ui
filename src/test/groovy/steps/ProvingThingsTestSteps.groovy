@@ -33,7 +33,7 @@ import static java.util.concurrent.TimeUnit.SECONDS
 class ProvingThingsTestSteps {
 
     def static rootUrl = "http://localhost:8000/"
-
+    //def static rootUrl = "https://pttg-ip-gt-ui-dev.notprod.homeoffice.gov.uk/"
     def healthUriRegex = "/healthz"
     def incomeUriRegex = "/incomeproving/v1/individual/nino/income"
     def defaultNino = "AA123456A"
@@ -311,6 +311,12 @@ class ProvingThingsTestSteps {
         errorSummaryTextItems.each {
             assert errorText.contains(it): "Error text did not contain: $it"
         }
+    }
+
+    @Then("^The service returns to the input page on clicking of the Start a new search button\$")
+    public void the_service_returns_to_the_input_page_on_clicking_of_the_Start_a_new_search_button(DataTable expectedResult) {
+        driver.findElement(By.className("button")).click();
+        assertTextFieldEqualityForTable(expectedResult)
     }
 
     @Then("^the health check response status should be (\\d+)\$")

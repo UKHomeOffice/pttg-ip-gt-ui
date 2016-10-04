@@ -33,6 +33,12 @@ generictoolModule.factory('GenerictoolService', ['IOService', '$state', function
     return details;
   };
 
+  this.reset = function () {
+    details.nino = '';
+    details.toDate = '';
+    details.fromDate = '';
+  };
+
   return this;
 }]);
 
@@ -77,17 +83,6 @@ function ($rootScope, $scope, $state, $stateParams, GenerictoolService, IOServic
     },
     toDate: {
       max: moment().format('YYYY-MM-DD'),
-      // errors: {
-      //   required: {
-      //     msg: 'Enter a valid application raised date'
-      //   },
-      //   invalid: {
-      //     msg: 'Enter a valid application raised date'
-      //   },
-      //   max: {
-      //     msg: 'Enter a valid application raised date'
-      //   }
-      // }
     }
   };
 
