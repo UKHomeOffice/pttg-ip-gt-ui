@@ -8,7 +8,7 @@ GIT_COMMIT=${GIT_COMMIT:0:7}
 VERSION=$(grep ^version build.gradle | cut -d= -f 2 | tr -d ' ' | sed -e "s|'||g" | sed -e "s|version|v|g")
 
 build_image_for_app_build() {
-  docker build -t "${GRADLE_IMAGE}" -f Dockerfile.build .
+  docker build --no-cache -t "${GRADLE_IMAGE}" -f Dockerfile.build .
 }
 
 build_app() {
