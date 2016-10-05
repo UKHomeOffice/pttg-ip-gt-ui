@@ -13,12 +13,10 @@ COPY . /code/
 
 WORKDIR /code
 
-# RUN npm rebuild node-sass
 RUN npm install phantomjs -g
 RUN npm install
 RUN npm install gulp
 
-RUN ls -l ./node_modules
-RUN ls -l ./node_modules/gulp
+RUN find / -name node_modules
 
 ENTRYPOINT ["gradle"]
