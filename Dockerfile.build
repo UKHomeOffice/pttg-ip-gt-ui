@@ -14,7 +14,7 @@ COPY . /code/
 WORKDIR /code
 
 RUN npm install phantomjs -g
-RUN npm install
+RUN npm install -g
 
 RUN cp -r /opt/nodejs/lib/node_modules .
 
