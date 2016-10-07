@@ -16,8 +16,8 @@ build_app() {
   [ -n "${BUILD_NUMBER}" ] && ENV_OPTS="BUILD_NUMBER=${BUILD_NUMBER} -e ${ENV_OPTS}"
 
   #docker rm -v $(docker ps -a -q -f status=exited)
-  docker run --name pttg-ip-gt-ui -e ${ENV_OPTS}  "${GRADLE_IMAGE}" "${@}"
-  docker cp pttg-ip-gt-ui:/work/build/libs/pttg-ip-gt-ui-${VERSION}.${GIT_COMMIT}.jar build/libs
+  docker run --name pttg-ip-gt-ui-build -e ${ENV_OPTS}  "${GRADLE_IMAGE}" "${@}"
+  docker cp pttg-ip-gt-ui-build:/work/build/libs/pttg-ip-gt-ui-${VERSION}.${GIT_COMMIT}.jar build/libs
 }
 
 set_props() {
@@ -27,7 +27,7 @@ set_props() {
 }
 
 build_image_that_runs_app() {
-  docker build --build-arg VERSION=${VERSION} --build-arg JAR_PATH=build/libs \
+  docker build --no-cache --build-arg VERSION=${VERSION} --build-arg JAR_PATH=build/libs \
     -t quay.io/ukhomeofficedigital/pttg-ip-gt-ui:${VERSION} .
 }
 
