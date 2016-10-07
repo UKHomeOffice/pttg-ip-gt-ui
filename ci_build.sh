@@ -18,6 +18,7 @@ build_app() {
   docker rm -v $(docker ps -a -q -f status=exited)
   docker run --name pttg-ip-gt-ui-build -e ${ENV_OPTS}  "${GRADLE_IMAGE}" "${@}"
   mkdir -p build/libs
+  ls -al build/libs
   docker cp pttg-ip-gt-ui-build:/work/build/libs/pttg-ip-gt-ui-${VERSION}.${GIT_COMMIT}.jar build/libs
 }
 
