@@ -15,11 +15,13 @@ build_app() {
   ENV_OPTS="GIT_COMMIT=${GIT_COMMIT} -e VERSION=${VERSION}"
   [ -n "${BUILD_NUMBER}" ] && ENV_OPTS="BUILD_NUMBER=${BUILD_NUMBER} -e ${ENV_OPTS}"
 
-  #docker rm -v $(docker ps -a -q -f status=exited)
+  oldContainers=$(docker ps -a -q -f status=exited)
+  if [[ $oldContainers ]]; then
+    docker rm -v $oldContainers
+  fi
   docker run --name pttg-ip-gt-ui-build -e ${ENV_OPTS}  "${GRADLE_IMAGE}" "${@}"
-  mkdir -p build/libs
-  ls -al build/libs
   docker cp pttg-ip-gt-ui-build:/work/build/libs/pttg-ip-gt-ui-${VERSION}.${GIT_COMMIT}.jar build/libs
+  #current error on jenkins : Error response from daemon: lstat /var/lib/docker/overlay2/cf217180de14108670d7a478bc7ab9d93ec659cf75b6e723ccd7c371160d4c1f/merged/work/build/libs/pttg-ip-gt-ui-v0.1.0.e800866.jar: no such file or directory
 }
 
 set_props() {
