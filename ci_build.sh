@@ -74,7 +74,7 @@ main() {
   echo "=== dockerBuild function"
   build_image_that_runs_app
 
-  echo "=== dockerPublish function - temp disabled"
+  echo "=== dockerPublish function"
   publish
 }
 
