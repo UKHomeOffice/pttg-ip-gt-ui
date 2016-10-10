@@ -27,7 +27,6 @@ build_app() {
 }
 
 set_props() {
-  [ -n "${BUILD_NUMBER}" ] && VERSION="${VERSION}-${BUILD_NUMBER}"
   [ -n "${GIT_COMMIT}" ] && VERSION="$VERSION.${GIT_COMMIT}"
   echo "VERSION=${VERSION}" > version.properties
 }
