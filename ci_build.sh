@@ -21,7 +21,7 @@ build_app() {
   fi
   docker run --name pttg-ip-gt-ui-build -e ${ENV_OPTS}  "${GRADLE_IMAGE}" "${@}"
   docker cp pttg-ip-gt-ui-build:/work/build/libs/ .
-  ls -al /libs
+  ls -al libs
   docker cp pttg-ip-gt-ui-build:/work/build/libs/pttg-ip-gt-ui-${VERSION}.${GIT_COMMIT}.jar build/libs
   #current error on jenkins : Error response from daemon: lstat /var/lib/docker/overlay2/cf217180de14108670d7a478bc7ab9d93ec659cf75b6e723ccd7c371160d4c1f/merged/work/build/libs/pttg-ip-gt-ui-v0.1.0.e800866.jar: no such file or directory
 }
