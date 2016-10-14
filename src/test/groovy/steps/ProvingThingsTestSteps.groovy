@@ -39,6 +39,7 @@ class ProvingThingsTestSteps {
     def defaultNino = "AA123456A"
 
     def testDataLoader
+    def dateParts = ["Day", "Month", "Year"]
 
     @Value('${wiremock}')
     private Boolean wiremock;
@@ -82,6 +83,14 @@ class ProvingThingsTestSteps {
         }
     }
 
+    private def assertDate(String fieldName, String v) {
+        String fieldval = ''
+        dateParts.each { part ->
+            fieldval += '/' + driver.findElement(By.id(fieldName + part)).getAttribute("value").padLeft(2, '0')
+        }
+        assert fieldval.substring(1) == v
+    }
+
     private void assertTextFieldEqualityForTable(DataTable expectedResult) {
         Map<String, String> entries = expectedResult.asMap(String.class, String.class)
         assertTextFieldEqualityForMap(entries)
@@ -94,6 +103,33 @@ class ProvingThingsTestSteps {
             WebElement element = driver.findElement(By.id(fieldName))
 
             assert element.getText() == v
+        }
+    }
+
+    private void assertInputValueEqualityForTable(DataTable expectedResult) {
+        Map<String, String> entries = expectedResult.asMap(String.class, String.class)
+        assertInputValueEqualityForMap(entries)
+    }
+
+    private Map<String, String> assertInputValueEqualityForMap(Map<String, String> entries) {
+
+        entries.each { k, v ->
+            String fieldName = toCamelCase(k);
+            if (fieldName.endsWith("Date") || fieldName.equals("dob")) {
+                assertDate(fieldName, v)
+
+            } else if (fieldName.equals("sortCode")) {
+                assertSortcode(fieldName, v)
+
+            } else if (fieldName == "inLondon") {
+                assertRadioSelection(inLondonRadio, v)
+
+            } else if (fieldName == "studentType") {
+                assertRadioSelection(studentTypeRadio, v)
+
+            } else {
+                assert driver.findElement(By.id(fieldName)).getAttribute("value") == v
+            }
         }
     }
 
@@ -205,6 +241,12 @@ class ProvingThingsTestSteps {
     public void the_new_search_button_is_clicked() throws Throwable {
         driver.sleep(delay)
         driver.findElement(By.className("button--newSearch")).click()
+    }
+
+    @When("^the edit search button is clicked\$")
+    public void the_edit_search_button_is_clicked() throws Throwable {
+        driver.sleep(delay)
+        driver.findElement(By.className("button--editSearch")).click()
     }
 
     @When("^Robert submits a query")
@@ -332,6 +374,11 @@ class ProvingThingsTestSteps {
         errorSummaryTextItems.each {
             assert errorText.contains(it): "Error text did not contain: $it"
         }
+    }
+
+    @Then("^the inputs will be populated with\$")
+    public void the_inputs_will_be_populated_with(DataTable expectedResult) {
+        assertInputValueEqualityForTable(expectedResult)
     }
 
     @Then("^the health check response status should be (\\d+)\$")

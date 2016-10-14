@@ -127,3 +127,15 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
     When the new search button is clicked
     Then the service displays the following page content
       | Page sub title | Individual details |
+
+  Scenario: edit search button is clicked
+    Given the account data for QQ765432A
+    Given Robert submits a query:
+      | NINO      | QQ765432A  |
+      | From Date | 01/02/2015 |
+      | To Date   | 31/01/2016 |
+    When the edit search button is clicked
+    Then the inputs will be populated with
+      | NINO      | QQ765432A  |
+      | From Date | 01/02/2015 |
+      | To Date   | 31/01/2016 |
