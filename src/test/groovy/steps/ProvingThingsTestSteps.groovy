@@ -49,6 +49,8 @@ class ProvingThingsTestSteps {
     private int delay = 500
     def defaultTimeout = 2000
 
+    def defaultFields
+
     @Before
     def setUp(Scenario scenario) {
         if (wiremock) {
@@ -119,6 +121,11 @@ class ProvingThingsTestSteps {
         driver.get(rootUrl);
     }
 
+    @Given("^the default details are\$")
+    public void the_default_details_are(DataTable arg1) throws Throwable {
+        defaultFields = arg1
+    }
+
     @Given("^the api response is delayed for (\\d+) seconds\$")
     public void the_api_response_is_delayed_for_seconds(int delay) throws Throwable {
         testDataLoader.withDelayedResponse(incomeUriRegex.replaceFirst("nino", defaultNino), delay)
@@ -156,14 +163,17 @@ class ProvingThingsTestSteps {
 
     @When("^the income check is performed\$")
     def the_income_check_is_performed() {
+        if (defaultFields) {
+            submitEntries(defaultFields.asMap(String.class, String.class))
+        } else {
+            Map<String, String> validDefaultEntries = [
+                    'From date': '01/05/2016',
+                    'To date'  : '30/05/2016',
+                    'NINO'     : defaultNino
+            ]
 
-        Map<String, String> validDefaultEntries = [
-                'From date': '01/05/2016',
-                'To date'  : '30/05/2016',
-                'NINO'     : defaultNino
-        ]
-
-        submitEntries(validDefaultEntries)
+            submitEntries(validDefaultEntries)
+        }
     }
 
     @When("^Robert submits a query to IPS Family TM Case Worker Tool:\$")
@@ -190,13 +200,24 @@ class ProvingThingsTestSteps {
         driver.findElement(By.className("button")).click();
     }
 
-    @When("^Robert submits a query:\$")
-    public void robert_submits_a_query(DataTable arg1) {
 
-        Map<String, String> entries = arg1.asMap(String.class, String.class)
-
-        submitEntries(entries)
+    @When("^the new search button is clicked\$")
+    public void the_new_search_button_is_clicked() throws Throwable {
+        driver.sleep(delay)
+        driver.findElement(By.className("button--newSearch")).click()
     }
+
+    @When("^Robert submits a query")
+    public void robert_submits_a_query(DataTable arg1) {
+        Map<String, String> entries = arg1.asMap(String.class, String.class)
+        if (defaultFields) {
+            Map<String, String> defaultEntries = defaultFields.asMap(String.class, String.class)
+            submitEntries(defaultEntries + entries)
+        } else {
+            submitEntries(entries)
+        }
+    }
+
 
     private void submitEntries(Map<String, String> entries) {
 
@@ -237,7 +258,7 @@ class ProvingThingsTestSteps {
         }
     }
 
-    @Then("^The service provides the following result:\$")
+    @Then("^the service provides the following result:\$")
     public void the_service_provides_the_following_results(DataTable expectedResult) {
         String amount
         println 'the_service_provides_the_following_results'
@@ -262,7 +283,7 @@ class ProvingThingsTestSteps {
         }
     }
 
-    @Then("^The service displays the following message:\$")
+    @Then("^the service displays the following message:\$")
     public void the_service_displays_the_following_message(DataTable arg1) {
 
         Map<String, String> entries = arg1.asMap(String.class, String.class)
@@ -273,7 +294,7 @@ class ProvingThingsTestSteps {
 
     }
 
-    @Then("^The service provides the following Your search results:\$")
+    @Then("^the service provides the following Your search results:\$")
     public void the_service_provides_the_following_Your_search_results(DataTable expectedResult) throws Throwable {
         assertTextFieldEqualityForTable(expectedResult)
     }
@@ -283,7 +304,7 @@ class ProvingThingsTestSteps {
         assertTextFieldEqualityForTable(expectedResult)
     }
 
-    @Then("^The service provides the following NINO does not exist result:\$")
+    @Then("^the service provides the following NINO does not exist result:\$")
     public void the_service_provides_the_following_NINO_does_not_exist_result(DataTable expectedResult) {
         assertTextFieldEqualityForTable(expectedResult)
     }
@@ -311,12 +332,6 @@ class ProvingThingsTestSteps {
         errorSummaryTextItems.each {
             assert errorText.contains(it): "Error text did not contain: $it"
         }
-    }
-
-    @Then("^The service returns to the input page on clicking of the Start a new search button\$")
-    public void the_service_returns_to_the_input_page_on_clicking_of_the_Start_a_new_search_button(DataTable expectedResult) {
-        driver.findElement(By.className("button")).click();
-        assertTextFieldEqualityForTable(expectedResult)
     }
 
     @Then("^the health check response status should be (\\d+)\$")

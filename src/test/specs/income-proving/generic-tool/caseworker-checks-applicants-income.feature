@@ -4,14 +4,17 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
 
   “How much income has the applicant or spouse earned within a given period?"
 
-  Scenario: Robert obtains NINO income details to understand how much they have earned within 6 months (single job)
+  Background:
     Given Robert is using the IPS Generic Tool
-    Given the account data for QQ123456A
-    When Robert submits a query:
+    And the default details are
       | NINO      | QQ123456A  |
       | From Date | 01/01/2015 |
       | To Date   | 30/06/2015 |
-    Then The service provides the following result:
+
+  Scenario: Robert obtains NINO income details to understand how much they have earned within 6 months (single job)
+    Given the account data for QQ123456A
+    When the income check is performed
+    Then the service provides the following result:
       | 03/01/2015 | Flying Pizza Ltd | £1,666.11 |
       | 03/02/2015 | Flying Pizza Ltd | £1,666.11 |
       | 05/03/2015 | Flying Pizza Ltd | £1,666.11 |
@@ -19,20 +22,18 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
       | 03/05/2015 | Flying Pizza Ltd | £1,666.11 |
       | 03/06/2015 | Flying Pizza Ltd | £1,666.11 |
       | Total:     |                  | £9,996.66 |
-    And The service provides the following Your search results:
+    And the service provides the following Your search results:
       | Your Search Individual Name           | Harry Callahan |
       | Your Search National Insurance Number | QQ123456A      |
       | Your Search From Date                 | 01/01/2015     |
       | Your Search To Date                   | 30/06/2015     |
 
   Scenario: Robert obtains NINO income details to understand how much they have earned within 12 months (multiple jobs over year period)
-    Given Robert is using the IPS Generic Tool
     Given the account data for QQ654321A
     When Robert submits a query:
       | NINO      | QQ654321A  |
-      | From Date | 01/01/2015 |
       | To Date   | 31/12/2015 |
-    Then The service provides the following result:
+    Then the service provides the following result:
       | 11/01/2015 | Sheffield Spice  | £1,000.00  |
       | 11/02/2015 | Sheffield Spice  | £1,000.00  |
       | 11/03/2015 | Sheffield Spice  | £1,000.00  |
@@ -46,20 +47,18 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
       | 11/11/2015 | Flying Pizza Ltd | £1,666.00  |
       | 11/12/2015 | Flying Pizza Ltd | £1,666.00  |
       | Total:     |                  | £18,164.00 |
-    And The service provides the following Your search results:
+    And the service provides the following Your search results:
       | Your Search Individual Name           | Harry Callahan |
       | Your Search National Insurance Number | QQ654321A      |
       | Your Search From Date                 | 01/01/2015     |
       | Your Search To Date                   | 31/12/2015     |
 
   Scenario: Robert obtains NINO income details to understand how much they have earned within 6 months (multiple jobs per month)
-    Given Robert is using the IPS Generic Tool
     Given the account data for QQ023987A
     When Robert submits a query:
       | NINO      | QQ023987A  |
-      | From Date | 01/01/2015 |
       | To Date   | 30/06/2015 |
-    Then The service provides the following result:
+    Then the service provides the following result:
       | 10/01/2015 | Flying Pizza Ltd | £2,000.00  |
       | 17/01/2015 | Halifax PLC      | £1,000.00  |
       | 01/02/2015 | Flying Pizza Ltd | £1,666.00  |
@@ -72,39 +71,36 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
       | 10/06/2015 | Halifax PLC      | £2,000.00  |
       | 17/06/2015 | Halifax PLC      | £2,000.00  |
       | Total:     |                  | £19,998.00 |
-    And The service provides the following Your search results:
+    And the service provides the following Your search results:
       | Your Search Individual Name           | Harry Callahan |
       | Your Search National Insurance Number | QQ023987A      |
       | Your Search From Date                 | 01/01/2015     |
       | Your Search To Date                   | 30/06/2015     |
 
   Scenario: Robert obtains NINO income details to understand how much he has earned within 6 months
-    Given Robert is using the IPS Generic Tool
     Given the account data for QQ987654A
     When Robert submits a query:
       | NINO      | QQ987654A  |
-      | From Date | 01/01/2015 |
       | To Date   | 30/06/2015 |
-    Then The service provides the following result:
+    Then the service provides the following result:
       | 04/01/2015 | Flying Pizza Ltd | £1,666.00 |
       | 04/02/2015 | Flying Pizza Ltd | £1,666.00 |
       | 20/05/2015 | Pizza Hut LTD    | £2,500.00 |
       | 20/06/2015 | Pizza Hut LTD    | £1,666.00 |
       | Total:     |                  | £7,498.00 |
-    And The service provides the following Your search results:
+    And the service provides the following Your search results:
       | Your Search Individual Name           | Harry Callahan |
       | Your Search National Insurance Number | QQ987654A      |
       | Your Search From Date                 | 01/01/2015     |
       | Your Search To Date                   | 30/06/2015     |
 
   Scenario: Robert obtains NINO income details to understand how much he has earned within 12 months
-    Given Robert is using the IPS Generic Tool
     Given the account data for QQ765432A
     When Robert submits a query:
       | NINO      | QQ765432A  |
       | From Date | 01/02/2015 |
       | To Date   | 31/01/2016 |
-    Then The service provides the following result:
+    Then the service provides the following result:
       | 01/02/2015 | Flying Pizza Ltd | £1,666.00  |
       | 01/03/2015 | Flying Pizza Ltd | £1,666.00  |
       | 01/04/2015 | Flying Pizza Ltd | £1,666.00  |
@@ -118,7 +114,7 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
       | 01/12/2015 | Flying Pizza Ltd | £1,000.00  |
       | 01/01/2016 | Flying Pizza Ltd | £2,500.00  |
       | Total:     |                  | £19,994.00 |
-    And The service provides the following Your search results:
+    And the service provides the following Your search results:
       | Your Search Individual Name           | Harry Callahan |
       | Your Search National Insurance Number | QQ765432A      |
       | Your Search From Date                 | 01/02/2015     |
@@ -126,24 +122,8 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
 
 
   Scenario: Robert obtains NINO income details and clicks on the Start a new search button
-    Given Robert is using the IPS Generic Tool
     Given the account data for QQ123456A
-    When Robert submits a query:
-      | NINO      | QQ123456A  |
-      | From Date | 01/01/2015 |
-      | To Date   | 30/06/2015 |
-    Then The service provides the following result:
-      | 03/01/2015 | Flying Pizza Ltd | £1,666.11 |
-      | 03/02/2015 | Flying Pizza Ltd | £1,666.11 |
-      | 05/03/2015 | Flying Pizza Ltd | £1,666.11 |
-      | 03/04/2015 | Flying Pizza Ltd | £1,666.11 |
-      | 03/05/2015 | Flying Pizza Ltd | £1,666.11 |
-      | 03/06/2015 | Flying Pizza Ltd | £1,666.11 |
-      | Total:     |                  | £9,996.66 |
-    And The service provides the following Your search results:
-      | Your Search Individual Name           | Harry Callahan |
-      | Your Search National Insurance Number | QQ123456A      |
-      | Your Search From Date                 | 01/01/2015     |
-      | Your Search To Date                   | 30/06/2015     |
-    And The service returns to the input page on clicking of the Start a new search button
+    Given the income check is performed
+    When the new search button is clicked
+    Then the service displays the following page content
       | Page sub title | Individual details |
