@@ -65,10 +65,14 @@ generictoolModule.controller('GenerictoolResultCtrl', ['$scope', '$state', '$fil
     $scope.reason = 'Please try again later.';
   }
 
+  // new search button
   $scope.newSearch = function () {
     GenerictoolService.reset();
     $state.go('generictool');
   };
 
-  console.log(res);
+  // edit search button
+  $scope.editSearch = function () {
+    $state.go('generictool');
+  };
 }]);
