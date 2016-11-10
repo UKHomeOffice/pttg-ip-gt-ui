@@ -381,23 +381,29 @@ class ProvingThingsTestSteps {
         assertInputValueEqualityForTable(expectedResult)
     }
 
-    @Then("^the health check response status should be (\\d+)\$")
-    def the_response_status_should_be(int expected) {
+    @Then("^the readiness response status should be (\\d+)\$")
+    def the_readiness_response_status_should_be(int expected) {
+        assertStatusMatchFor("healthz", expected)
+    }
 
-        def result = getHealthCheckStatus()
+    @Then("^the liveness response status should be (\\d+)\$")
+    def the_liveness_response_status_should_be(int expected) {
+        assertStatusMatchFor("ping", expected)
+    }
+
+    def assertStatusMatchFor(String endpoint, int expected){
+
+        def result = responseStatusFor(rootUrl + endpoint)
 
         // Sometimes needs a retry, not sure why
         2.times {
             if (result != expected) {
                 sleep(500)
-                result = getHealthCheckStatus()
+                result = responseStatusFor(rootUrl + endpoint)
             }
         }
 
         assert result == expected
     }
 
-    private int getHealthCheckStatus() {
-        responseStatusFor(rootUrl + "healthz")
-    }
 }
