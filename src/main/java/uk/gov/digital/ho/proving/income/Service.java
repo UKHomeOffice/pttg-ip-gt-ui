@@ -18,6 +18,7 @@ import uk.gov.digital.ho.proving.income.audit.AuditActions;
 import uk.gov.digital.ho.proving.income.domain.api.ApiResponse;
 import uk.gov.digital.ho.proving.income.domain.api.Nino;
 import uk.gov.digital.ho.proving.income.domain.client.IncomeResponse;
+import uk.gov.digital.ho.proving.income.health.ApiAvailabilityChecker;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -35,7 +36,7 @@ import static uk.gov.digital.ho.proving.income.audit.AuditEventType.SEARCH;
 import static uk.gov.digital.ho.proving.income.audit.AuditEventType.SEARCH_RESULT;
 
 @RestController
-@RequestMapping("/incomeproving/v1/individual/{nino}/income")
+@RequestMapping("/incomeproving/v1")
 @ControllerAdvice
 public class Service {
 
@@ -53,8 +54,12 @@ public class Service {
     @Autowired
     private ApplicationEventPublisher auditor;
 
+    @Autowired
+    private ApiAvailabilityChecker apiAvailabilityChecker;
+
+
     @Retryable(interceptor = "connectionExceptionInterceptor")
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/individual/{nino}/income", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity checkIncome(@Valid Nino nino,
                                       @RequestParam(value = "fromDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                                       @RequestParam(value = "toDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
@@ -125,6 +130,11 @@ public class Service {
         auditData.put("response", response);
 
         return auditData;
+    }
+
+    @RequestMapping(path = "availability", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity availability(){
+        return apiAvailabilityChecker.check();
     }
 
 }
