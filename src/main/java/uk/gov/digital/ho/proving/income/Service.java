@@ -24,12 +24,10 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static net.logstash.logback.argument.StructuredArguments.value;
 import static org.springframework.http.HttpMethod.GET;
