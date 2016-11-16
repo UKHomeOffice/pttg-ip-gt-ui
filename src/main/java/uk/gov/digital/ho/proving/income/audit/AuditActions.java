@@ -17,7 +17,7 @@ public class AuditActions {
 
     public static AuditApplicationEvent auditEvent(AuditEventType type, UUID id, Map<String, Object> data) {
 
-        if (data == null) data = new HashMap<String, Object>();
+        if (data == null) data = new HashMap<>();
 
         data.put("eventId", id);
 
