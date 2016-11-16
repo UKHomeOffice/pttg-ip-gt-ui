@@ -1,7 +1,10 @@
 Feature: System errors - specify messages shown in response to (simulated) connection failures etc
 
     Background:
-        Given Robert is using the IPS Generic Tool
+        Given the api health check response has status 200
+        And Robert is using the IPS Generic Tool
+
+
 
     Scenario: Sensible connection timeout
         Given the api response is delayed for 10 seconds

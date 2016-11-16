@@ -14,7 +14,7 @@ generictoolModule.factory('GenerictoolService', ['IOService', '$state', function
   };
 
   this.submit = function (nino, fromDate, toDate) {
-    IOService.get('incomeproving/v1/individual/' + nino + '/income', {fromDate: fromDate, toDate: toDate}, {timeout: 5000 }).then(function (res) {
+    IOService.get('individual/' + nino + '/income', {fromDate: fromDate, toDate: toDate}, {timeout: 5000 }).then(function (res) {
       // console.log(res);
       lastAPIresponse = res;
       $state.go('generictoolResults');

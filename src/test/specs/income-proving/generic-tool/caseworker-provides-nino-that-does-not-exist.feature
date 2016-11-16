@@ -1,5 +1,8 @@
 Feature: Tool identifies applicant NINO does not exist
 
+  Background:
+    Given the api health check response has status 200
+
   Scenario: Caseworker enters a NINO where no records exist within the period stated
     Given Robert is using the IPS Generic Tool
     Given no record for RK123456C

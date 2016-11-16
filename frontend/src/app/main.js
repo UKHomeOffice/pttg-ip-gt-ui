@@ -3,12 +3,13 @@ var app = angular.module('hod.proving', [
   'ngAria',
   'hod.generictool',
   'hod.forms',
-  'hod.io'
+  'hod.io',
+  'hod.availability'
 ]);
 
 
 app.constant('CONFIG', {
-  api: '/'//'http://127.0.0.1:3001/'//$('html').data('api')
+  api: '/incomeproving/v1/'
 });
 
 
@@ -26,13 +27,15 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 }]);
 
 
-app.run(['$location', '$rootScope', '$window', '$timeout', function($location, $rootScope, $window, $timeout) {
+app.run(['$location', '$rootScope', '$window', '$timeout', 'AvailabilityService', function($location, $rootScope, $window, $timeout, AvailabilityService) {
   // see http://simplyaccessible.com/article/spangular-accessibility/
 
   $rootScope.$on('$viewContentLoaded', function () {
     // http://stackoverflow.com/questions/25596399/set-element-focus-in-angular-way
 
     // http://www.accessiq.org/news/features/2013/03/aria-and-accessibility-adding-focus-to-any-html-element
+
+    AvailabilityService.setURL('availability');
 
     $timeout(function() {
       var e = angular.element(document.querySelector('#pageTitle'));

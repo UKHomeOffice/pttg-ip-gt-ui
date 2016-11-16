@@ -5,7 +5,8 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
   “How much income has the applicant or spouse earned within a given period?"
 
   Background:
-    Given Robert is using the IPS Generic Tool
+    Given the api health check response has status 200
+    And Robert is using the IPS Generic Tool
     And the default details are
       | NINO      | QQ123456A  |
       | From Date | 01/01/2015 |

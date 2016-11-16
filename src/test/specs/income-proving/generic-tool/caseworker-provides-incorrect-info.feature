@@ -4,7 +4,8 @@ Feature: Input validation
   Date formats: Format should be dd/mm/yyyy or d/m/yyyy
 
   Background:
-    Given Robert is using the IPS Generic Tool
+    Given the api health check response has status 200
+    And Robert is using the IPS Generic Tool
     And the default details are
       | NINO      | QQ123456A  |
       | From Date | 01/01/2015 |
