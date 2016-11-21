@@ -16,6 +16,9 @@ buildscript {
 
         classpath "com.moowork.gradle:gradle-node-plugin:0.12"
         classpath "com.moowork.gradle:gradle-gulp-plugin:0.12"
+
+        classpath 'org.owasp:dependency-check-gradle:1.4.3'
+
     }
 }
 
@@ -23,6 +26,7 @@ apply plugin: 'pttgCommonGradle'
 apply plugin: 'pttgSpringBootGradle'
 apply plugin: 'net.serenity-bdd.aggregator'
 apply plugin: 'com.moowork.gulp'
+apply plugin: 'org.owasp.dependencycheck'
 
 group 'com.hod'
 version '0.1.0'
