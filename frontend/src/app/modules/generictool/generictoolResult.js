@@ -42,19 +42,24 @@ generictoolModule.controller('GenerictoolResultCtrl', ['$scope', '$state', '$fil
     return;
   }
 
+  var incomes = [];
+
   $scope.details.displayToDate = displayDate($scope.details.toDate);
   $scope.details.displayFromDate = displayDate($scope.details.fromDate);
-  $scope.individual = res.data.individual;
-  var incomes = [];
-  _.each(res.data.incomes, function (inc) {
-    incomes.push({
-      payDate: displayDate(inc.payDate),
-      employer: inc.employer,
-      income: pounds(inc.income)
+
+  if (res.data && res.data.individual && res.data.incomes) {
+    $scope.individual = res.data.individual;
+    _.each(res.data.incomes, function (inc) {
+      incomes.push({
+        payDate: displayDate(inc.payDate),
+        employer: inc.employer,
+        income: pounds(inc.income)
+      });
     });
-  });
-  $scope.incomes = incomes;
-  $scope.total = pounds(res.data.total);
+    $scope.incomes = incomes;
+    $scope.total = pounds(res.data.total);
+  }
+
 
   $scope.haveResult = (incomes.length > 0) ? true: false;
   if (res.status === 404) {
