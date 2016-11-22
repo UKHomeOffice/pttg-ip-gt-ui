@@ -1,9 +1,11 @@
 package uk.gov.digital.ho.proving.income
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.IntegrationTest
-import org.springframework.boot.test.SpringApplicationConfiguration
-import org.springframework.boot.test.TestRestTemplate
+import org.springframework.boot.context.embedded.LocalServerPort
+import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.web.client.RestTemplate
@@ -12,34 +14,31 @@ import spock.lang.Timeout
 import uk.gov.digital.ho.proving.income.domain.ResponseDetails
 
 import static java.util.concurrent.TimeUnit.SECONDS
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 
 /**
  * @Author Home Office Digital
  */
-@SpringApplicationConfiguration(classes = ServiceRunner.class)
-@WebAppConfiguration
-@IntegrationTest("server.port:0")
-@TestPropertySource(properties = [
-        "api.root=http://10.255.255.1",
-        "rest.connection.connect-timeout=500",
-        "connectionRetryDelay=500",
-        "connectionAttemptCount=2"
-])
+@SpringBootTest(
+        webEnvironment = RANDOM_PORT,
+        classes = [ServiceRunner.class],
+        properties = [
+                "api.root=http://10.255.255.1",
+                "rest.connection.connect-timeout=500",
+                "connectionRetryDelay=500",
+                "connectionAttemptCount=2"
+        ])
 class ServiceConnTimeoutIntegrationSpec extends Specification {
-
-    @Value('${local.server.port}')
-    def port
 
     def path = "/incomeproving/v1/individual/AA121212A/income?"
     def params = "fromDate=2014-12-01&toDate=2015-01-01"
     def url
 
-    RestTemplate restTemplate
-
+    @Autowired
+    TestRestTemplate restTemplate
 
     def setup() {
-        restTemplate = new TestRestTemplate()
-        url = "http://localhost:" + port + path + params
+        url = path + params
     }
 
     @Timeout(value = 4, unit = SECONDS)

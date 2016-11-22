@@ -87,11 +87,11 @@ public class ServiceExceptionHandler {
 
             case BAD_REQUEST:
                 LOGGER.error(append("errorCode", "0007"), "Rest service exception - bad request, which means that there may be a mismatch between UI and API");
-                return new ResponseEntity<ResponseDetails>(new ResponseDetails(API_CLIENT_ERROR), INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(new ResponseDetails(API_CLIENT_ERROR), INTERNAL_SERVER_ERROR);
 
             case INTERNAL_SERVER_ERROR:
                 LOGGER.error(append("errorCode", "0006"), "Rest service exception - internal server error");
-                return new ResponseEntity<ResponseDetails>(new ResponseDetails(API_SERVER_ERROR), INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(new ResponseDetails(API_SERVER_ERROR), INTERNAL_SERVER_ERROR);
 
             case NOT_FOUND:
                 LOGGER.warn(append("errorCode", "0009"), "Rest service exception - not found");
@@ -103,7 +103,7 @@ public class ServiceExceptionHandler {
 
             default:
                 LOGGER.error(append("errorCode", "0005"), "Rest service exception: {}", exception.getMessage());
-                return new ResponseEntity<ResponseDetails>(
+                return new ResponseEntity<>(
                         new ResponseDetails(INTERNAL_ERROR.getCode(), "API response status: " + exception.getStatusCode()), INTERNAL_SERVER_ERROR);
         }
     }
@@ -119,7 +119,7 @@ public class ServiceExceptionHandler {
         }
 
         FieldError fieldError = exception.getFieldErrors().get(0);
-        String fieldName = fieldError.getField().toString();
+        String fieldName = fieldError.getField();
         String problem = fieldError.getDefaultMessage();
 
         String code = problem.equalsIgnoreCase("missing parameter") ? "0001" : "0003";

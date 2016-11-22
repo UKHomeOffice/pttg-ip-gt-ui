@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static net.logstash.logback.argument.StructuredArguments.value;
 import static org.springframework.http.HttpMethod.GET;
 import static uk.gov.digital.ho.proving.income.audit.AuditActions.auditEvent;
@@ -62,14 +62,16 @@ public class Service {
     @RequestMapping(path = "/individual/{nino}/income", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity checkIncome(@Valid Nino nino,
                                       @RequestParam(value = "fromDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-                                      @RequestParam(value = "toDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
+                                      @RequestParam(value = "toDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+                                      @CookieValue(value = "kc-access", defaultValue = "") String accessToken) {
 
         LOGGER.debug("CheckIncome: Nino - {} From Date - {} To Date - {}", value("nino", nino.getNino()), fromDate, toDate);
 
         UUID eventId = AuditActions.nextId();
         auditor.publishEvent(auditEvent(SEARCH, eventId, auditData(nino, fromDate, toDate)));
 
-        ApiResponse apiResult = restTemplate.exchange(buildUrl(nino.getNino(), toDate, fromDate), GET, entity(), ApiResponse.class).getBody();
+        ApiResponse apiResult = restTemplate.exchange(buildUrl(nino.getNino(), toDate, fromDate), GET,
+                addTokenToHeaders(entity(), accessToken), ApiResponse.class).getBody();
 
         LOGGER.debug("Api result: {}", value("checkIncomeApiResult", apiResult));
 
@@ -101,7 +103,7 @@ public class Service {
         HttpHeaders headers = new HttpHeaders();
 
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(asList(MediaType.APPLICATION_JSON));
+        headers.setAccept(singletonList(MediaType.APPLICATION_JSON));
 
         return headers;
     }
@@ -132,8 +134,16 @@ public class Service {
         return auditData;
     }
 
+    private HttpEntity addTokenToHeaders(HttpEntity<?> entity, String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.putAll(entity.getHeaders());
+        headers.add("Cookie", "kc-access=" + accessToken);
+        HttpEntity<?> newEntity = new HttpEntity<>(headers);
+        return newEntity;
+    }
+
     @RequestMapping(path = "availability", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity availability(){
+    public ResponseEntity availability() {
         return apiAvailabilityChecker.check();
     }
 
