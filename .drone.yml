@@ -22,6 +22,8 @@ pipeline:
       - ls
       - cd /drone
       - ls
+      - cd src/pttg-ip-gt-ui/build/libs
+      - ls
     when:
       event: push
 
