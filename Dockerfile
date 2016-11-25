@@ -5,7 +5,7 @@ ENV USER pttg
 ENV GROUP pttg
 ENV NAME pttg-ip-gt-ui
 
-ARG JAR_PATH
+ENV JAR_PATH build/libs
 ARG VERSION
 
 WORKDIR /app
