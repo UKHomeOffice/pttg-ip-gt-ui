@@ -18,9 +18,11 @@ pipeline:
     commands:
       - docker run --name pttg-ip-gt-ui-build gradle-node build
       - mkdir -p build/libs
-      - cd /drone/src
+      - pwd
       - ls
-      - docker cp pttg-ip-gt-ui-build:/work/build/libs/ /drone/src/build/libs/
+      - cd /drone/src/github.com
+      - ls
+      - docker cp pttg-ip-gt-ui-build:/work/build/libs/ build/libs
     when:
       event: push
 
