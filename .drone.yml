@@ -19,9 +19,6 @@ pipeline:
       - docker run --name pttg-ip-gt-ui-build gradle-node build
       - mkdir -p build/libs
       - docker cp pttg-ip-gt-ui-build:/work/build/libs/ build
-      - cd build/libs
-      - pwd
-      - ls
     when:
       event: push
 
@@ -31,11 +28,6 @@ pipeline:
     environment:
       - DOCKER_HOST=tcp://127.0.0.1:2375
     commands:
-      - pwd
-      - ls
-      - cd build/libs
-      - pwd
-      - ls
       - docker build -t quay.io/ukhomeofficedigital/pttg-ip-gt-ui:${DRONE_COMMIT_SHA} .
     when:
       event: push
