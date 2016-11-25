@@ -2,11 +2,13 @@ pipeline:
 
   my-build:
     privileged: true
-    image: quay.io/ukhomeofficedigital/openjdk8:v1.1.0
+    image: quay.io/ukhomeofficedigital/gradle-nodejs:v2.13.1
     environment:
       - DOCKER_HOST=tcp://127.0.0.1:2375
       - PTTG_GH_TOKEN=${PTTG_GH_TOKEN}
     commands:
+      - npm install phantomjs -g
+      - npm install && ls -l
       - ./gradlew build
     when:
       event: push

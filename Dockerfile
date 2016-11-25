@@ -17,7 +17,7 @@ RUN groupadd -r ${GROUP} && \
 
 COPY package.json /app/package.json
 
-COPY ${JAR_PATH}/${NAME}-${VERSION}.jar /app
+COPY ${JAR_PATH}/${NAME}*.jar /app
 COPY run.sh /app
 
 RUN chmod a+x /app/run.sh
