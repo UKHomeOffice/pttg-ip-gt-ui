@@ -16,7 +16,7 @@ pipeline:
     environment:
       - DOCKER_HOST=tcp://127.0.0.1:2375
     commands:
-      - docker run gradle-node build
+      - docker run --name pttg-ip-gt-ui-build gradle-node build
       - ls
     when:
       event: push
@@ -27,6 +27,7 @@ pipeline:
     environment:
       - DOCKER_HOST=tcp://127.0.0.1:2375
     commands:
+      - ls
       - docker build -t quay.io/ukhomeofficedigital/pttg-ip-gt-ui:${DRONE_COMMIT_SHA} .
     when:
       event: push
