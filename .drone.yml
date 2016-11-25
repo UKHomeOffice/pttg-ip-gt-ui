@@ -12,12 +12,11 @@ pipeline:
 
   my-build:
     privileged: true
-    image: gradle-node
+    image: docker:1.11
     environment:
       - DOCKER_HOST=tcp://127.0.0.1:2375
-      - PTTG_GH_TOKEN=${PTTG_GH_TOKEN}
     commands:
-      - ./gradlew build
+      - docker run gradle-node ./gradlew build
     when:
       event: push
 
