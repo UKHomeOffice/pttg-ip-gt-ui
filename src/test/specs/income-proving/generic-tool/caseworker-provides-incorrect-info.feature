@@ -1,14 +1,20 @@
 Feature: Input validation
 
   National Insurance Numbers (NINO) - Format and Security: A NINO is made up of two letters, six numbers and a final letter (which is always A, B, C, or D)
+  First Name - Minimum of 3 characters
+  Last Name - Minimum of 3 characters
+  Date Of Birth - dd/mm/yyyy
   Date formats: Format should be dd/mm/yyyy or d/m/yyyy
 
   Background:
     Given Robert is using the IPS Generic Tool
     And the default details are
-      | NINO      | QQ123456A  |
-      | From Date | 01/01/2015 |
-      | To Date   | 30/06/2015 |
+      | NINO        | QQ123456A     |
+      |First Name   | Harry         |####
+      |Last Name    | Callahan      |####
+      |Date of Birth| 02/01/1980    |#####
+      | From Date   | 01/01/2015    |
+      | To Date     | 30/06/2015    |
 
 ###################################### Section - Check for text on input page ######################################
 
@@ -22,14 +28,20 @@ Feature: Input validation
 
   Scenario: Error summary details are shown when a validation error occurs
     When Robert submits a query:
-      | NINO      |  |
-      | From Date |  |
-      | To Date   |  |
+      | NINO          |  |
+      | First Name    |  |
+      | Last Name     |  |
+      | Date of birth |  |
+      | From Date     |  |
+      | To Date       |  |
     Then the service displays the following message:
       | validation-error-summary-heading | There's some invalid information                  |
       | validation-error-summary-text    | Make sure that all the fields have been completed |
     And the error summary list contains the text
       | The National Insurance Number is invalid |
+      | The First Name is invalid                |#
+      | The Last Name is invalid                 |#
+      | The Date Of Birth is invalid             |#
       | The from date is invalid                 |
       | The to date is invalid                   |
 
@@ -116,3 +128,13 @@ Feature: Input validation
       | To Date |  |
     Then the service displays the following message:
       | toDate-error | Enter a valid to date |
+
+    Scenario: Caseworker does not enter first name, last name and date of birth #########
+      When Robert submits query:
+        |First Name   |  |
+        |Last Name    |  |
+        |Dat of birth |  |
+      Then the service displays the following mesage
+        |First Name   | Enter valid first name    |
+        |Last Name    | Enter valid last name     |
+        |Dat of birth | Enter valid date of birth |
