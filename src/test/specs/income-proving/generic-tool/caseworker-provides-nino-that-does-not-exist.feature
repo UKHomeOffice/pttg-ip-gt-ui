@@ -4,9 +4,12 @@ Feature: Tool identifies applicant NINO does not exist
     Given Robert is using the IPS Generic Tool
     Given no record for RK123456C
     When Robert submits a query:
-      | NINO      | RK123456C  |
-      | From Date | 01/01/2015 |
-      | To Date   | 01/07/2015 |
+      | NINO        | RK123456C  |
+      |First Name   | Harry      |##
+      |Last Name    | Callahan   |##
+      |Date of Birth| 02/01/1980 |#####
+      | From Date   | 01/01/2015 |
+      | To Date     | 01/07/2015 |
     Then the service provides the following NINO does not exist result:
       | Page dynamic heading                  | There is no record for RK123456C with HMRC                                                                                                 |
       | Page dynamic detail                   | We couldn't perform the financial requirement check as no income information exists with HMRC for the National Insurance Number RK123456C. |

@@ -7,9 +7,12 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
   Background:
     Given Robert is using the IPS Generic Tool
     And the default details are
-      | NINO      | QQ123456A  |
-      | From Date | 01/01/2015 |
-      | To Date   | 30/06/2015 |
+      | NINO        | QQ123456A  |
+      |First Name   | Harry      |##
+      |Last Name    | Callahan   |##
+      |Date of Birth| 02/01/1980 |#####
+      | From Date   | 01/01/2015 |
+      | To Date     | 30/06/2015 |
 
   Scenario: Robert obtains NINO income details to understand how much they have earned within 6 months (single job)
     Given the account data for QQ123456A
@@ -31,8 +34,11 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
   Scenario: Robert obtains NINO income details to understand how much they have earned within 12 months (multiple jobs over year period)
     Given the account data for QQ654321A
     When Robert submits a query:
-      | NINO      | QQ654321A  |
-      | To Date   | 31/12/2015 |
+      | NINO        | QQ654321A  |
+      |First Name   | Harry      |##
+      |Last Name    | Callahan   |##
+      |Date of Birth| 02/01/1980 |#####
+      | To Date     | 31/12/2015 |
     Then the service provides the following result:
       | 11/01/2015 | Sheffield Spice  | £1,000.00  |
       | 11/02/2015 | Sheffield Spice  | £1,000.00  |
@@ -56,8 +62,11 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
   Scenario: Robert obtains NINO income details to understand how much they have earned within 6 months (multiple jobs per month)
     Given the account data for QQ023987A
     When Robert submits a query:
-      | NINO      | QQ023987A  |
-      | To Date   | 30/06/2015 |
+      | NINO        | QQ023987A  |
+      |First Name   | Harry      |##
+      |Last Name    | Callahan   |##
+      |Date of Birth| 02/01/1980 |#####
+      | To Date     | 30/06/2015 |
     Then the service provides the following result:
       | 10/01/2015 | Flying Pizza Ltd | £2,000.00  |
       | 17/01/2015 | Halifax PLC      | £1,000.00  |
@@ -80,8 +89,11 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
   Scenario: Robert obtains NINO income details to understand how much he has earned within 6 months
     Given the account data for QQ987654A
     When Robert submits a query:
-      | NINO      | QQ987654A  |
-      | To Date   | 30/06/2015 |
+      | NINO        | QQ987654A  |
+      |First Name   | Harry      |##
+      |Last Name    | Callahan   |##
+      |Date of Birth| 02/01/1980 |#####
+      | To Date     | 30/06/2015 |
     Then the service provides the following result:
       | 04/01/2015 | Flying Pizza Ltd | £1,666.00 |
       | 04/02/2015 | Flying Pizza Ltd | £1,666.00 |
@@ -97,9 +109,12 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
   Scenario: Robert obtains NINO income details to understand how much he has earned within 12 months
     Given the account data for QQ765432A
     When Robert submits a query:
-      | NINO      | QQ765432A  |
-      | From Date | 01/02/2015 |
-      | To Date   | 31/01/2016 |
+      | NINO        | QQ765432A  |
+      |First Name   | Harry      |##
+      |Last Name    | Callahan   |##
+      |Date of Birth| 02/01/1980 |#####
+      | From Date   | 01/02/2015 |
+      | To Date     | 31/01/2016 |
     Then the service provides the following result:
       | 01/02/2015 | Flying Pizza Ltd | £1,666.00  |
       | 01/03/2015 | Flying Pizza Ltd | £1,666.00  |
@@ -131,11 +146,17 @@ Feature: Robert checks a NINO income to understand how much Jon has earned withi
   Scenario: edit search button is clicked
     Given the account data for QQ765432A
     Given Robert submits a query:
-      | NINO      | QQ765432A  |
-      | From Date | 01/02/2015 |
-      | To Date   | 31/01/2016 |
+      | NINO        | QQ765432A  |
+      |First Name   | Harry      |##
+      |Last Name    | Callahan   |##
+      |Date of Birth| 02/01/1980 |#####
+      | From Date   | 01/02/2015 |
+      | To Date     | 31/01/2016 |
     When the edit search button is clicked
     Then the inputs will be populated with
-      | NINO      | QQ765432A  |
-      | From Date | 01/02/2015 |
-      | To Date   | 31/01/2016 |
+      | NINO        | QQ765432A  |
+      |First Name   | Harry      |##
+      |Last Name    | Callahan   |##
+      |Date of Birth| 02/01/1980 |#####
+      | From Date   | 01/02/2015 |
+      | To Date     | 31/01/2016 |

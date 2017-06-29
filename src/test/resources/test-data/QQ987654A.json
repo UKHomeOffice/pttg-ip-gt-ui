@@ -3,7 +3,8 @@
     "title" : "Mr",
     "forename" : "Harry",
     "surname" : "Callahan",
-    "nino" : "QQ987654A"
+    "nino" : "QQ987654A",
+    "date of birth" :"1980-01-02"
   },
   "incomes" : [
     {
