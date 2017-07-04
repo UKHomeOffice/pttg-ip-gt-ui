@@ -14,6 +14,9 @@ Feature: Tool identifies applicant NINO does not exist
       | Page dynamic heading                  | There is no record for RK123456C with HMRC                                                                                                 |
       | Page dynamic detail                   | We couldn't perform the financial requirement check as no income information exists with HMRC for the National Insurance Number RK123456C. |
       | Your Search National Insurance Number | RK123456C                                                                                                                                  |
+      | Your Search First Name                | Harry      |##
+      | Your Search Last Name                 | Callahan   |##
+      | Your Search Date of Birth             | 02/01/1980 |#####
       | Your Search From Date                 | 01/01/2015                                                                                                                                 |
       | Your Search To Date                   | 01/07/2015                                                                                                                                 |
 
@@ -28,5 +31,8 @@ Feature: Tool identifies applicant NINO does not exist
       | Page dynamic heading                  | There is no record for KR123456C with HMRC                                                                                                 |
       | Page dynamic detail                   | We couldn't perform the financial requirement check as no income information exists with HMRC for the National Insurance Number KR123456C. |
       | Your Search National Insurance Number | KR123456C                                                                                                                                  |
+      | Your Search First Name                | Harry      |##
+      | Your Search Last Name                 | Callahan   |##
+      | Your Search Date of Birth             | 02/01/1980 |#####
       | Your Search From Date                 | 01/04/2015                                                                                                                                 |
       | Your Search To Date                   | 20/12/2015                                                                                                                                 |
